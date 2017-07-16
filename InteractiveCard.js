@@ -4,42 +4,60 @@ import React, { Component } from 'react'
 import {
 	Text,
 	View,
+	ScrollView,
 	Animated,
 	PanResponder,
 	TouchableOpacity,
 	LayoutAnimation,
+	Dimensions
 } from 'react-native'
 import styles from './InteractiveCardStyle'
 
 export default class InteractiveCard extends Component {
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 
-		this.state = { isActive: false };
-		this.state.containerLayout = null;
-		this.state.panResponder = {
-			panHandlers: null
+		this.wrapperStyles = {borderWidth: 1};
+		this.state = {
+			isActive: false,
+			wrapperStyles: this.wrapperStyles
 		};
+		this.state.panResponder = { panHandlers: null };
+
+		this.containerLayout = null;
+
+		this.header = this.props.children[0];
+		this.content = this.props.children[1];
 
 		// These are needed since they will be animated later on
-		this.containerStyle = styles.container;
-		this.cardStyle = styles.cardClosed;
-		this.contentStyle = styles.contentStyles;
-		this.dismissIconStyle = styles.dismissIcon;
+		this.containerStyle = [props.style, {position: 'relative'}];
 
 		this.positionAnimateVal = new Animated.Value(0);
 		this.dimensionsAnimateVal = new Animated.Value(0);
+		this.instantVal = new Animated.Value(0);
 	}
 
 	// -- Component lifecycle methods -- //
 	componentWillMount() {
 
-		this.state.panResponder = PanResponder.create({
-			onStartShouldSetPanResponder: () => this.state.isActive,
-			onPanResponderGrant: () => {
+		const newContentStyles = {
+			opacity: 1,
+			transform: [
+				// { scaleY: 0.1 }
+			],
+		};
+		const contentStyle =
+			(Array.isArray(this.content.props.style)) ?
+				this.props.style.concat(newContentStyles) : [].concat(this.content.props.style, newContentStyles);
 
-			},
+		this.content = (<Content {...this.content.props} style={contentStyle} />)
+
+	}
+
+	componentDidMount() {
+
+		this.state.panResponder = PanResponder.create({
 			onMoveShouldSetResponder: () => this.state.isActive,
 			onPanResponderMove: (event, gestureState) => {
 
@@ -72,16 +90,7 @@ export default class InteractiveCard extends Component {
 				}
 			}
 		});
-	}
 
-	componentDidMount() {
-		setTimeout(() => {
-			// These are the animatable components. So we apply the animatable styles
-			this.cardStyle = this.getCardAnimatableStyles();
-			this.contentStyle = [this.contentStyle, this.getContentAnimatableStyles()];
-			this.dismissIconStyle = [this.dismissIconStyle, this.getDismissIconAnimatableStyles()]
-
-		}, 500)
 	}
 
 
@@ -91,8 +100,11 @@ export default class InteractiveCard extends Component {
 			this.open();
 
 			// To notify parent that this card is active
-			if (this.props.onPress)
-				this.props.index ? this.props.onPress(this.props.index) : this.props.onPress(true)
+			if (this.props.onActive)
+				this.props.index ? this.props.onActive(this.props.index) : this.props.onActive(true)
+		} else {
+			this.close();
+
 		}
 	}
 
@@ -106,103 +118,84 @@ export default class InteractiveCard extends Component {
 		this.setState({layout: event.nativeEvent.layout})
 	}
 
+
 	_onContainerLayout(event) {
-		this.setState({containerLayout: event.nativeEvent.layout})
+		this.containerLayout = event.nativeEvent.layout;
+		this.containerStyle = [this.containerStyle, {height: this.containerLayout.height}];
+		this.initCardWrapperAnimatableStyles(this.containerLayout)
 	}
+
 
 	/* -- Functions -- */
 	open() {
 		this.setState({ isActive: true });
 
-		this.containerStyle = [styles.container, styles.containerOpen];
+		this.containerStyle = [this.props.style, {zIndex: 2, position: 'relative'}];
 
-		Animated.timing(this.dimensionsAnimateVal, {
-			toValue: 1,
-			duration: 300,
-			delay: 100
-		}).start();
+		this.instantVal.setValue(1);
 
-		Animated.spring(this.positionAnimateVal, {
-			toValue: 1,
-			speed: 10,
-			bounciness: 10
-		}).start();
+		// Animated.timing(this.dimensionsAnimateVal, {
+		// 	toValue: 1,
+		// 	duration: 300,
+		// 	delay: 100
+		// }).start();
+		//
+		// Animated.spring(this.positionAnimateVal, {
+		// 	toValue: 1,
+		// 	speed: 10,
+		// 	bounciness: 10
+		// }).start();
 	}
 
 	close() {
 		this.setState({isActive: false});
 
-		Animated.spring(this.positionAnimateVal, {
-			toValue: 0,
-			speed: 20,
-			bounciness: 10,
-			delay: 200
-		}).start();
+		this.instantVal.setValue(0);
 
-		Animated.timing(this.dimensionsAnimateVal, {
-			toValue: 0,
-			duration: 400
-		}).start((status) => {
-			if (status.finished) {
-				this.containerStyle = [styles.container];
-				if (this.props.onPress) {
-					this.props.onPress(null)
-				}
-			}
-		});
+		// Animated.spring(this.positionAnimateVal, {
+		// 	toValue: 0,
+		// 	speed: 20,
+		// 	bounciness: 10,
+		// 	delay: 200
+		// }).start();
+		//
+		// Animated.timing(this.dimensionsAnimateVal, {
+		// 	toValue: 0,
+		// 	duration: 400
+		// }).start((status) => {
+		// 	if (status.finished) {
+		// 		this.containerStyle = [this.props.style];
+		// 		if (this.props.onPress) {
+		// 			this.props.onPress(null)
+		// 		}
+		// 	}
+		// });
 	}
 
 	// -- Helper functions -- //
-	getAppropriateContainerStyles() {
-		return [
-			styles.cardGeneral,
-			this.cardStyle,
-			this.props.style
-		];
-	}
-
-	getAppropriateContentStyles() {
-		return [
-			{
-				transform: [
-					{translateY: -100},
-				]
-			},
-			this.contentStyle,
-		]
-	}
-
-	getAppropriateHeaderStyles() {
-		return [
-			styles.headerStyle
-		]
-	}
-
-	getCardAnimatableStyles() {
+	initCardWrapperAnimatableStyles(containerLayout) {
+		const windowDimensions = Dimensions.get('window');
 
 		let dimensionsAnimatedStyles = getAnimatableStyles(this.dimensionsAnimateVal, {
-
-			height: {
-				input: [0, 0.3, 1],
-				output: [this.state.layout.height, this.state.layout.height, this.props.openCoords.height]
-			},
 			shadowOpacity: { from: 0, to: 0.3 },
 			shadowRadius: { from: 0.5, to: 7 },
 		});
-		let positionAnimatedStyes = getAnimatableStyles(this.positionAnimateVal, {
-			top: {
-				input: [0, 0.3, 1],
-				output: [this.state.layout.y, (this.props.openCoords.y - this.state.containerLayout.y) / 1.1, this.props.openCoords.y - this.state.containerLayout.y]
-			},
-			left: { from: this.state.layout.x, to: this.props.openCoords.x - this.state.containerLayout.x},
-			width: { from: this.state.layout.width, to: this.props.openCoords.width },
+
+		let instantChangeStyes = getAnimatableStyles(this.instantVal, {
+			top: { from: 0, to: 0 - containerLayout.y },
+			left: { from: 0, to: 0 - containerLayout.x},
+			width: { from: containerLayout.width, to: windowDimensions.width },
+			height: { from: containerLayout.height, to: windowDimensions.height	},
 		});
 
-		return {
-			position: "absolute",
-			...positionAnimatedStyes,
+		const animatableStyles = {
+			position: 'absolute',
+			backgroundColor: 'grey',
+			...instantChangeStyes,
 			...dimensionsAnimatedStyles
-		}
+		};
+
+		this.setState({wrapperStyles: [].concat(this.state.wrapperStyles, animatableStyles)})
 	}
 
 	getContentAnimatableStyles(openCoords) {
@@ -236,35 +229,22 @@ export default class InteractiveCard extends Component {
 	}
 
 	render() {
-		// console.log("rendering")
-		const containerStylesToRender = this.getAppropriateContainerStyles();
-		const headerStylesToRender = this.getAppropriateHeaderStyles();
-		const contentStylesToRender = this.getAppropriateContentStyles();
-		const dismissIconStylesToRender = this.dismissIconStyle;
-
+		console.log("Rendering " + this.props.name);
 		return (
-		    <TouchableOpacity onPress={this._onPress.bind(this)} onLayout={this._onContainerLayout.bind(this)}
-		                      style={this.containerStyle} enabled={(this.state.isActive ? 1.0 : 0.9)}>
-			    <Animated.View style={containerStylesToRender} onLayout={this._onLayout.bind(this)}>
-				    <View style={headerStylesToRender} {...this.state.panResponder.panHandlers}>
-					    <Text>Header</Text>
-				    </View>
-				    <Animated.View style={contentStylesToRender}>
-					    <Text>Content</Text>
-				    </Animated.View>
+		    <TouchableOpacity onPress={this._onPress.bind(this)} onLayout={this._onContainerLayout.bind(this)} style={this.containerStyle} activeOpacity={(this.state.isActive ? 1.0 : 0.5)}>
+			    <Animated.View style={this.state.wrapperStyles}>
+				    { this.header }
 			    </Animated.View>
 		    </TouchableOpacity>
 		)
 	}
 }
 
-
 export class Header extends Component {
 
 	render() {
-		console.log(this.props.children);
 		return (
-		    <View>
+		    <View style={this.props.style}>
 			    { this.props.children }
 		    </View>
 		)
@@ -272,9 +252,10 @@ export class Header extends Component {
 }
 
 export class Content extends Component {
+
 	render() {
 		return (
-		    <View>
+		    <View style={this.props.style}>
 			    { this.props.children }
 		    </View>
 		)
