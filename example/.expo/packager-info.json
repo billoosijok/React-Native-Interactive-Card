@@ -1,0 +1,8 @@
+{
+  "expoServerPort": 19001,
+  "packagerPort": 19002,
+  "packagerPid": 6100,
+  "expoServerNgrokUrl": "https://sp-j82.billoosijok.example.exp.direct",
+  "packagerNgrokUrl": "https://packager.sp-j82.billoosijok.example.exp.direct",
+  "ngrokPid": 6115
+}
