@@ -2,5 +2,6 @@
 \.DS_Store
 
 \.idea/
+example/node_modules/
 
 node_modules/*
