@@ -1,19 +1,15 @@
 import {StyleSheet} from 'react-native'
 //import {Fonts, Colors, Metrics} from '../../Themes'
 
-export const cardHeight = 102.44;
+const cardHeight = 102.44;
 
 const openCardShadowRadius = 10;
 const closedCardShadowRadius = 2;
-const borderRadius = 5
+const borderRadius = 5;
 
 export default  StyleSheet.create({
 	container: {
-		position: 'relative',
-		height: cardHeight,
-		borderRadius: 10,
-		width: '100%',
-		borderWidth: 1
+		// position: 'relative',
 	},
 	containerOpen: {
 		zIndex: 2,
