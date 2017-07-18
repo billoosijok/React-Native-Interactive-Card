@@ -330,9 +330,9 @@ export default class InteractiveCard extends Component {
 		// console.log("Rendering " + this.props.name);
 		return (
 		    <TouchableOpacity ref={component => this._containerOfAll = component} onPress={this._onPress.bind(this)} onLayout={this._onContainerLayout.bind(this)} style={this.containerStyle} activeOpacity={(this.state.isActive ? 1.0 : 0.5)}>
-			    <Animated.View style={this.state.overlayStyles}></Animated.View>
-			    <Animated.View style={this.state.wrapperStyles} {...this.state.panResponder.panHandlers} >
-				    { this.header }
+			    <Animated.View style={this.state.overlayStyles}/>
+			    <Animated.View style={this.state.wrapperStyles}  >
+				    <Header {...this.header.props} panHandlers={this.state.panResponder.panHandlers} />
 				    <Content {...this.content.props} style={this.state.contentStyles} />
 			    </Animated.View>
 		    </TouchableOpacity>
@@ -344,7 +344,7 @@ export class Header extends Component {
 
 	render() {
 		return (
-		    <View style={this.props.style}>
+		    <View {...this.props.panHandlers} style={this.props.style}>
 			    { this.props.children }
 		    </View>
 		)

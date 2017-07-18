@@ -12,7 +12,7 @@ export default class App extends React.Component {
 			{}
 		];
 
-		this.cards = [1,2,3,4,5].map((number, i) => {
+		this.cards = [1,2,3,4,5,6,7,8].map((number, i) => {
 			return (
 				<InteractiveCard key={i} name={number} style={styles.cardStyles} openCoords={{y: 5, x: 5, height: 260, width: 300}}>
 					<Header style={styles.headerWrapper}>
