@@ -32,7 +32,13 @@ export default class InteractiveCard extends Component {
 		};
 		this.containerRequiredStyle = {position: 'relative', overflow: 'hidden'};
 
-		this.overlayRequiredStyles = {position: 'absolute', backgroundColor: 'white', opacity: 0.8};
+		this.overlayRequiredStyles = {
+			position: 'absolute',
+			backgroundColor: 'white',
+			opacity: 0,
+			height: "100%",
+			width: "100%"
+		};
 
 		this.state = {
 			isActive: false,
@@ -48,6 +54,7 @@ export default class InteractiveCard extends Component {
 
 		this.headerAnimateVal = new Animated.Value(0);
 		this.contentAnimateVal = new Animated.Value(0);
+		this.overlayAnimateVal = new Animated.Value(0);
 
 		this.instantVal = new Animated.Value(0);
 	}
@@ -147,14 +154,19 @@ export default class InteractiveCard extends Component {
 		Animated.spring(this.headerAnimateVal, {
 			toValue: 1,
 			speed: 5,
-			bounciness: 10
+			bounciness: 10,
 		}).start();
 
 		Animated.spring(this.contentAnimateVal, {
 			toValue: 1,
 			speed: 1,
 			bounciness: 1,
-			delay: 1000
+			delay: 1000,
+		}).start();
+
+		Animated.timing(this.overlayAnimateVal, {
+			toValue: 1,
+			duration: 100
 		}).start();
 	}
 
@@ -182,6 +194,11 @@ export default class InteractiveCard extends Component {
 			speed: 20,
 			bounciness: 10,
 		}).start();
+
+		Animated.timing(this.overlayAnimateVal, {
+			toValue: 0,
+			duration: 100
+		}).start();
 	}
 
 	// -- Helper functions -- //
@@ -191,11 +208,13 @@ export default class InteractiveCard extends Component {
 
 		this._containerOfAll.measureInWindow((x, y, width, height) => {
 
+			const newCardWrapperY = -y + 20;
+
 			let positionAnimatedStyles = {
 				transform: [
 					{ translateY: this.headerAnimateVal.interpolate({
 						inputRange: [0, 1],
-						outputRange: [0, -y + 20]
+						outputRange: [0, newCardWrapperY]
 					})}
 				]
 			};
@@ -236,30 +255,40 @@ export default class InteractiveCard extends Component {
 	}
 
 	initOverlayAnimatableStyles(containerX, containerY, containerWidth, containerHeight) {
+
 		const windowDimensions = Dimensions.get('window');
+
+		const containerYCenter = containerY + (containerHeight / 2);
+		const overlayScaleY = windowDimensions.height/ containerHeight; // 0.5 for margin
+		const newHeight = containerHeight * overlayScaleY;
+
+		let overlayDeadCenter = containerYCenter - (windowDimensions.height / 2) + containerHeight / 2;
+		overlayDeadCenter = -overlayDeadCenter/overlayScaleY+11;
+		console.log(overlayDeadCenter/overlayScaleY);
 		return {
-			width: this.instantVal.interpolate({
-					inputRange: [0, 1],
-					outputRange: [0, windowDimensions.width]
-			}),
-			height: this.instantVal.interpolate({
-				inputRange: [0, 1],
-				outputRange: [0, windowDimensions.height],
-			}),
 			transform : [
-				{ scale: this.headerAnimateVal.interpolate({
+				// { scaleX: this.overlayAnimateVal.interpolate({
+				// 	inputRange: [0, 1],
+				// 	outputRange: [1, 2]
+				// })},
+				{ scaleY: this.overlayAnimateVal.interpolate({
 					inputRange: [0, 1],
-					outputRange: [1, 1]
+					outputRange: [1, overlayScaleY]
 				})},
-				{ translateX: this.instantVal.interpolate({
+				// { translateX: this.overlayAnimateVal.interpolate({
+				// 	inputRange: [0, 1],
+				// 	outputRange: [0, containerX]
+				// })},
+				{ translateY: this.overlayAnimateVal.interpolate({
 					inputRange: [0, 1],
-					outputRange: [0, containerX]
-				})},
-				{ translateY: this.instantVal.interpolate({
-					inputRange: [0, 1],
-					outputRange: [-containerHeight/2 - windowDimensions.height, -containerY]
+					outputRange: [0, overlayDeadCenter]
 				})}
-			]
+			],
+			opacity: this.overlayAnimateVal.interpolate({
+				inputRange: [0, 1],
+				outputRange: [0, 0.8]
+			})
+
 		}
 
 	}
