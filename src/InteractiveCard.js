@@ -72,31 +72,51 @@ export default class InteractiveCard extends Component {
 	componentDidMount() {
 
 		this.state.panResponder = PanResponder.create({
-			onStartShouldSetPanResponder: () => true,
+			onStartShouldSetPanResponder: () => this.state.isActive,
 			onPanResponderGrant: () => {
 
 			},
 			onMoveShouldSetResponder: () => this.state.isActive,
 			onPanResponderMove: (event, gestureState) => {
 
-				const target = this.state.containerLayout.y + Math.abs(this.props.openCoords.y);
+				const target = this.containerLayout.y + Math.abs(this.props.openCoords.y);
 				const newAnimateVal = 1 - (gestureState.dy / target);
 
 				if (newAnimateVal <= 1 && newAnimateVal >= 0) {
-					Animated.spring(this.headerAnimateVal, {
-						toValue: newAnimateVal
+					Animated.timing(this.headerAnimateVal, {
+						toValue: newAnimateVal,
+						duration: 0,
+						useNativeDriver: true,
 					}).start();
 
-					Animated.spring(this.contentAnimateVal, {
-						toValue: newAnimateVal
-					}).start();
-				} else if (newAnimateVal <= 1.1 && newAnimateVal >= -0.1) {
-					Animated.spring(this.headerAnimateVal, {
-						toValue: newAnimateVal * 0.05
+					Animated.timing(this.contentAnimateVal, {
+						toValue: newAnimateVal,
+						duration: 0,
+						useNativeDriver: true,
 					}).start();
 
-					Animated.spring(this.contentAnimateVal, {
-						toValue: newAnimateVal * 0.05
+					Animated.timing(this.overlayAnimateVal, {
+						toValue: newAnimateVal,
+						duration: 0,
+						useNativeDriver: true,
+					}).start();
+				} else if (newAnimateVal > 1 || newAnimateVal < -0) {
+					Animated.timing(this.headerAnimateVal, {
+						toValue: newAnimateVal * 0.05,
+						duration: 0,
+						useNativeDriver: true,
+					}).start();
+
+					Animated.timing(this.contentAnimateVal, {
+						toValue: newAnimateVal * 0.05,
+						duration: 0,
+						useNativeDriver: true,
+					}).start();
+
+					Animated.timing(this.overlayAnimateVal, {
+						toValue: newAnimateVal * 0.05,
+						duration: 0,
+						useNativeDriver: true,
 					}).start();
 				}
 			},
@@ -153,20 +173,24 @@ export default class InteractiveCard extends Component {
 
 		Animated.spring(this.headerAnimateVal, {
 			toValue: 1,
-			speed: 5,
-			bounciness: 10,
+			useNativeDriver: true,
+			speed: 10,
+			bounciness: 8,
 		}).start();
 
 		Animated.spring(this.contentAnimateVal, {
 			toValue: 1,
-			speed: 1,
+			useNativeDriver: true,
+			speed: 20,
 			bounciness: 1,
-			delay: 1000,
+			delay: 200,
 		}).start();
 
 		Animated.timing(this.overlayAnimateVal, {
 			toValue: 1,
-			duration: 100
+			duration: 100,
+			useNativeDriver: true,
+
 		}).start();
 	}
 
@@ -177,8 +201,9 @@ export default class InteractiveCard extends Component {
 
 		Animated.spring(this.headerAnimateVal, {
 			toValue: 0,
-			speed: 20,
-			bounciness: 10,
+			useNativeDriver: true,
+			speed: 10,
+			bounciness: 8,
 		}).start((status) => {
 			if (status.finished) {
 				this.containerStyle = [this.props.style, this.containerRequiredStyle, {zIndex: 0, overflow: 'hidden'}];
@@ -191,13 +216,16 @@ export default class InteractiveCard extends Component {
 
 		Animated.spring(this.contentAnimateVal, {
 			toValue: 0,
+			useNativeDriver: true,
 			speed: 20,
 			bounciness: 10,
 		}).start();
 
 		Animated.timing(this.overlayAnimateVal, {
 			toValue: 0,
-			duration: 100
+			duration: 100,
+			useNativeDriver: true,
+
 		}).start();
 	}
 
@@ -243,10 +271,6 @@ export default class InteractiveCard extends Component {
 					outputRange: [-100, cardWrapperHeight-20]
 				})}
 			],
-			paddingTop: this.contentAnimateVal.interpolate({
-				inputRange: [0, 1],
-				outputRange: [0, 20]
-			}),
 			opacity: this.contentAnimateVal.interpolate({
 				inputRange: [0, 1],
 				outputRange: [0, 1]
@@ -272,16 +296,16 @@ export default class InteractiveCard extends Component {
 				// 	outputRange: [1, 2]
 				// })},
 				{ scaleY: this.overlayAnimateVal.interpolate({
-					inputRange: [0, 1],
-					outputRange: [1, overlayScaleY]
+					inputRange: [0, 0.1, 1],
+					outputRange: [1, overlayScaleY, overlayScaleY]
 				})},
 				// { translateX: this.overlayAnimateVal.interpolate({
 				// 	inputRange: [0, 1],
 				// 	outputRange: [0, containerX]
 				// })},
 				{ translateY: this.overlayAnimateVal.interpolate({
-					inputRange: [0, 1],
-					outputRange: [0, overlayDeadCenter]
+					inputRange: [0, 0.1, 1],
+					outputRange: [0, overlayDeadCenter, overlayDeadCenter]
 				})}
 			],
 			opacity: this.overlayAnimateVal.interpolate({
@@ -307,7 +331,7 @@ export default class InteractiveCard extends Component {
 		return (
 		    <TouchableOpacity ref={component => this._containerOfAll = component} onPress={this._onPress.bind(this)} onLayout={this._onContainerLayout.bind(this)} style={this.containerStyle} activeOpacity={(this.state.isActive ? 1.0 : 0.5)}>
 			    <Animated.View style={this.state.overlayStyles}></Animated.View>
-			    <Animated.View style={this.state.wrapperStyles}>
+			    <Animated.View style={this.state.wrapperStyles} {...this.state.panResponder.panHandlers} >
 				    { this.header }
 				    <Content {...this.content.props} style={this.state.contentStyles} />
 			    </Animated.View>
