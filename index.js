@@ -1,2 +1,2 @@
 
-export const InteractiveCard = require("./src/InteractiveCard");
+export default const InteractiveCard = require("./src/InteractiveCard");

@@ -20,6 +20,7 @@ export default class InteractiveCard extends Component {
 
 		this.header = this.props.children[0];
 		this.content = this.props.children[1];
+		this.dismissButton = this.findDismissButton();
 
 		// These are needed since they will be animated later on
 		this.wrapperRequiredStyles = {position: 'relative'};
@@ -34,7 +35,7 @@ export default class InteractiveCard extends Component {
 
 		this.overlayRequiredStyles = {
 			position: 'absolute',
-			backgroundColor: 'white',
+			backgroundColor: this.props.overlayColor || 'white',
 			opacity: 0,
 			height: "100%",
 			width: "100%"
@@ -42,6 +43,7 @@ export default class InteractiveCard extends Component {
 
 		this.state = {
 			isActive: false,
+			header: null,
 			wrapperStyles: this.wrapperRequiredStyles,
 			contentStyles: this.contentRequiredStyles,
 			overlayStyles: this.overlayRequiredStyles,
@@ -62,14 +64,19 @@ export default class InteractiveCard extends Component {
 	// -- Component lifecycle methods -- //
 	componentWillMount() {
 
+		this.props.dimissButton.type.arguments = ["ya"]
+		console.log(this.props.dimissButton);
+
 		// Combining required styles with styles passed into 'style' prop
 		this.state.contentStyles =
 			(Array.isArray(this.content.props.style)) ?
-				this.props.style.concat(this.contentRequiredStyles) : [].concat(this.content.props.style, this.contentRequiredStyles);
+				this.content.props.style.concat(this.contentRequiredStyles) : [].concat(this.content.props.style, this.contentRequiredStyles);
 
 	}
 
 	componentDidMount() {
+
+
 
 		this.state.panResponder = PanResponder.create({
 			onStartShouldSetPanResponder: () => this.state.isActive,
@@ -206,7 +213,7 @@ export default class InteractiveCard extends Component {
 			bounciness: 8,
 		}).start((status) => {
 			if (status.finished) {
-				this.containerStyle = [this.props.style, this.containerRequiredStyle, {zIndex: 0, overflow: 'hidden'}];
+				this.containerStyle = [this.props.style, this.containerRequiredStyle, {zIndex: 0}];
 				this.forceUpdate();
 				if (this.props.onPress) {
 					this.props.onPress(null)
@@ -288,8 +295,9 @@ export default class InteractiveCard extends Component {
 
 		let overlayDeadCenter = containerYCenter - (windowDimensions.height / 2) + containerHeight / 2;
 		overlayDeadCenter = -overlayDeadCenter/overlayScaleY+11;
-		console.log(overlayDeadCenter/overlayScaleY);
+		// console.log(overlayDeadCenter/overlayScaleY);
 		return {
+
 			transform : [
 				// { scaleX: this.overlayAnimateVal.interpolate({
 				// 	inputRange: [0, 1],
@@ -310,7 +318,7 @@ export default class InteractiveCard extends Component {
 			],
 			opacity: this.overlayAnimateVal.interpolate({
 				inputRange: [0, 1],
-				outputRange: [0, 0.8]
+				outputRange: [0, this.props.overlayOpacity || 0.8]
 			})
 
 		}
@@ -326,14 +334,33 @@ export default class InteractiveCard extends Component {
 		}
 	}
 
+	findDismissButton() {
+		return findChildComponent(this.props.children, "DismissButton");
+	}
+
+	setRef(refName, component) {
+		this[refName] = component
+	}
+
 	render() {
 		// console.log("Rendering " + this.props.name);
 		return (
-		    <TouchableOpacity ref={component => this._containerOfAll = component} onPress={this._onPress.bind(this)} onLayout={this._onContainerLayout.bind(this)} style={this.containerStyle} activeOpacity={(this.state.isActive ? 1.0 : 0.5)}>
+		    <TouchableOpacity
+			    ref={this.setRef.bind(this,"_containerOfAll")}
+			    onPress={this._onPress.bind(this)}
+			    onLayout={this._onContainerLayout.bind(this)}
+			    style={this.containerStyle}
+			    activeOpacity={(this.state.isActive ? 1.0 : 0.5)}
+		        disabled={this.state.isActive}>
+
 			    <Animated.View style={this.state.overlayStyles}/>
 			    <Animated.View style={this.state.wrapperStyles}  >
-				    <Header {...this.header.props} panHandlers={this.state.panResponder.panHandlers} />
-				    <Content {...this.content.props} style={this.state.contentStyles} />
+				    <Header ref="head" style={this.header.props.style} panHandlers={this.state.panResponder.panHandlers}>
+					    {this.header.props.children}
+				    </Header>
+				    <Content style={this.state.contentStyles}>
+					    {this.content.props.children}
+				    </Content>
 			    </Animated.View>
 		    </TouchableOpacity>
 		)
@@ -363,12 +390,20 @@ export class Content extends Component {
 }
 
 export class DismissButton extends Component {
+	getImage() {
+		if (this.props.imageSource) {
+			return this.props.imageSource;
+		} else {
+			return ("./assets/dismissBlue.png");
+		}
+	}
 	render() {
 		return (
-		    <TouchableOpacity onPress={this._onDismissPress.bind(this)} disabled={!this.state.isActive}
+		    <TouchableOpacity onPress={(this._onDismissPress) ? this._onDismissPress.bind(this) : undefined}
 		                      style={[styles.dismissButton]}>
-			    <Animated.Image source={this.props.imageSource} style={dismissIconStylesToRender}
-			                    resizeMode={'contain'}/>
+			    {/*<Animated.Image source={"./assets/dismissBlue.png"}*/}
+			                    {/*resizeMode={'contain'}/>*/}
+			                    <Text>{this.props.text || "yay"}</Text>
 		    </TouchableOpacity>
 		)
 	}
@@ -408,4 +443,40 @@ function getAnimatableStyles(interpolationValue, styles) {
 	}
 
 	return animatedStyles;
+}
+
+/*
+* Returns the first instance of the component with matching childComponentName
+* */
+function findChildComponent(children, childComponentName) {
+
+	// Only doing this because if there is only one child,
+	// it comes in as an object. Therefore, we put it into an array
+	// to be able to use the same loop
+	children = (children.length) ? children : [children];
+
+	for (let i = 0; i < children.length; i++) {
+		const node = children[i];
+
+
+		// Checking if it has children
+		if (node.type && (node.type.name === childComponentName
+			|| node.type.displayName === childComponentName)) {
+			// children. = undef;
+			return node;
+		}
+
+		if (node.props && node.props.children) {
+			let nodeFound = findChildComponent(node.props.children, childComponentName);
+
+			if (nodeFound) {
+				return nodeFound;
+			}
+		}
+
+	}
+
+	// If nothing was found above
+	return undefined;
+
 }

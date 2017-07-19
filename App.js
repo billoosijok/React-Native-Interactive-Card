@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, ScrollView, View} from 'react-native';
 
-import InteractiveCard, {Header, Content} from './src/InteractiveCard';
+import InteractiveCard, {Header, Content, DismissButton} from './src/InteractiveCard';
 
 export default class App extends React.Component {
 	constructor() {
@@ -13,29 +13,37 @@ export default class App extends React.Component {
 		];
 
 		this.cards = [1,2,3,4,5,6,7,8].map((number, i) => {
+
+			const dismissButton = (<DismissButton key={i} yes="true" />)
 			return (
-				<InteractiveCard key={i} name={number} style={styles.cardStyles} openCoords={{y: 5, x: 5, height: 260, width: 300}}>
+				<InteractiveCard
+					key={i}
+					name={number}
+					style={styles.cardStyles}
+					openCoords={{y: 5, x: 5, height: 260, width: 300}}
+					overlayOpacity={0.7}
+				    dimissButton={dismissButton}
+				>
 					<Header style={styles.headerWrapper}>
 						<View style={styles.cardHeader}>
 							<View style={styles.leftColumn}>
-								<View style={styles.image}></View>
+								<View style={styles.image} />
 							</View>
 							<View style={styles.rightColumn}>
-								<View style={styles.heading}></View>
-								<View style={styles.subheading}></View>
+								{dismissButton}
+								<View style={styles.heading} />
+								<View style={styles.subheading} />
 							</View>
 						</View>
 					</Header>
 					<Content style={styles.contentWrapper}>
-						<View style={styles.content}>
-							<Text style={styles.contentText}>👍</Text>
-						</View>
+						<ScrollView style={styles.content}>
+							<Text style={styles.contentText}>{number}</Text>
+						</ScrollView>
 					</Content>
 				</InteractiveCard>
 			)
 		})
-
-
 	}
 	render() {
 		return (
@@ -101,7 +109,6 @@ const styles = StyleSheet.create({
 		width: 100,
 		height: 20,
 		borderRadius: 7
-
 	},
 	contentWrapper:{
 		alignItems: 'center'
