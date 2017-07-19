@@ -1,5 +1,9 @@
 # react-native-interactive-card
 Interactive Cards for React Native
 
+### Status:
+Still in the works.
+
+
 ### Demo
-![Demo Gif](https://lh3.googleusercontent.com/7-2C-OD6smRSmuNNyZrTgYXUyx7H5pO920JZnEXNvPMTj5GnocpzZbmYYFXWe_cyHwlR9Pn091DRCNhfTn2-bUTiVQiCa4srScMibzrFY6uWgJ5pDltXwaqLoRB4cPB3TpaXF1k8NUhcgz76fiFuRW6HA36rWu9c7BXpUg_hKP2GFJVXQecb7hGSkXTRvr6LdBlnBY7-zdOSQ-zOJfraWB3q5j_U-MHuIuAIGNoBXSYuefPG1uiTvLZ1glMNl0vHUdatReaVNT16SaQT4rhg7Z2KmzSuDCn1gRxNX7UpLR-18eBHRAx4cSIYU7I8qmvkiguvk17u_Yo0gHYtVuuJyqLO1aD7kbafUFKXraXqX9138TfUHWImGKSFvKoj42Mt-DULTAsy_t3-u8CGK7oumZ6VcFAwqBUEAtTZzftao-ZxRRDZq0j6tWc-A1FMtuMp9dfAyi3YisI5noZ1U3i2gIrIZzzXQ3sdbFyXhGcTIT09uuRjiG22NVu9A6l7iaUt8lkMMIJGdlXDgec0kysINyi4pfVYHAagTm1L7y-i7W_J_AtNyY2fHWpTyBK8s-UzdLnLGf51=w2880-h1494)
+![Demo Gif](https://thumbs.gfycat.com/PinkCourteousHerculesbeetle-size_restricted.gif)
