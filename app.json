@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "react-native-interactive-card",
+    "name": "ExpoBase-2",
     "description": "An empty new project",
-    "slug": "react-native-interactive-card",
+    "slug": "ExpoBase-2",
     "privacy": "public",
     "sdkVersion": "18.0.0",
     "version": "1.0.0",
-    "orientation": "default",
+    "orientation": "portrait",
     "primaryColor": "#cccccc",
     "icon": "./assets/icons/app.png",
     "loading": {

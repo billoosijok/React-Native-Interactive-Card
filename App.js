@@ -21,16 +21,15 @@ export default class App extends React.Component {
 					name={number}
 					style={styles.cardStyles}
 					openCoords={{y: 5, x: 5, height: 260, width: 300}}
-					overlayOpacity={0.7}
-				    dimissButton={dismissButton}
-				>
+					overlayOpacity={0.7}>
 					<Header style={styles.headerWrapper}>
 						<View style={styles.cardHeader}>
 							<View style={styles.leftColumn}>
 								<View style={styles.image} />
 							</View>
 							<View style={styles.rightColumn}>
-								{dismissButton}
+								<DismissButton card={this.refs.name} />
+
 								<View style={styles.heading} />
 								<View style={styles.subheading} />
 							</View>

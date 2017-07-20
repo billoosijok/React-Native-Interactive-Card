@@ -47,39 +47,14 @@ export default  StyleSheet.create({
 		backgroundColor: "grey"
 	},
 	dismissButton: {
-		flex: 1,
+		position: "absolute",
+		right: 0,
 		alignItems: 'center',
 		justifyContent: 'flex-start',
 	},
 	dismissIcon: {
 		opacity: 0,
-		maxWidth: '70%',
+		maxWidth: 70,
 		height: '50%',
 	},
-	visibleDismissIcon: {
-		opacity: 1,
-	},
-	contentStyles: {
-		flex: 0,
-		height: 0,
-		overflow: 'hidden',
-		zIndex: 1,
-		marginLeft: 3,
-		marginRight: 3,
-		borderRadius: 5,
-		alignItems: 'center'
-	},
-	contentScrollView: {
-		paddingLeft: 20,
-		paddingRight: 20,
-		paddingTop: 20,
-	},
-	contentText: {
-		fontSize: 30,
-		fontWeight: 'bold',
-		textAlign: 'center',
-		padding: 10,
-		opacity: 0.7,
-		width: 300,
-	}
 })

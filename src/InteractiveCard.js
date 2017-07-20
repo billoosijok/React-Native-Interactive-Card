@@ -64,8 +64,6 @@ export default class InteractiveCard extends Component {
 	// -- Component lifecycle methods -- //
 	componentWillMount() {
 
-		this.props.dimissButton.type.arguments = ["ya"]
-		console.log(this.props.dimissButton);
 
 		// Combining required styles with styles passed into 'style' prop
 		this.state.contentStyles =
@@ -76,8 +74,6 @@ export default class InteractiveCard extends Component {
 
 	componentDidMount() {
 
-
-
 		this.state.panResponder = PanResponder.create({
 			onStartShouldSetPanResponder: () => this.state.isActive,
 			onPanResponderGrant: () => {
@@ -87,45 +83,30 @@ export default class InteractiveCard extends Component {
 			onPanResponderMove: (event, gestureState) => {
 
 				const target = this.containerLayout.y + Math.abs(this.props.openCoords.y);
-				const newAnimateVal = 1 - (gestureState.dy / target);
+				let newAnimateVal = 1 - (gestureState.dy / target);
 
-				if (newAnimateVal <= 1 && newAnimateVal >= 0) {
-					Animated.timing(this.headerAnimateVal, {
-						toValue: newAnimateVal,
-						duration: 0,
-						useNativeDriver: true,
-					}).start();
+				// If it's more than 1 or less than 0 we decrease the animation rate. ie add friction
+				if (newAnimateVal > 1.05) newAnimateVal = 1 + newAnimateVal * 0.05;
+				if (newAnimateVal <= 0) newAnimateVal = newAnimateVal * 0.05;
 
-					Animated.timing(this.contentAnimateVal, {
-						toValue: newAnimateVal,
-						duration: 0,
-						useNativeDriver: true,
-					}).start();
+				Animated.timing(this.headerAnimateVal, {
+					toValue: newAnimateVal,
+					duration: 0,
+					useNativeDriver: true,
+				}).start();
 
-					Animated.timing(this.overlayAnimateVal, {
-						toValue: newAnimateVal,
-						duration: 0,
-						useNativeDriver: true,
-					}).start();
-				} else if (newAnimateVal > 1 || newAnimateVal < -0) {
-					Animated.timing(this.headerAnimateVal, {
-						toValue: newAnimateVal * 0.05,
-						duration: 0,
-						useNativeDriver: true,
-					}).start();
+				Animated.timing(this.contentAnimateVal, {
+					toValue: newAnimateVal,
+					duration: 0,
+					useNativeDriver: true,
+				}).start();
 
-					Animated.timing(this.contentAnimateVal, {
-						toValue: newAnimateVal * 0.05,
-						duration: 0,
-						useNativeDriver: true,
-					}).start();
-
-					Animated.timing(this.overlayAnimateVal, {
-						toValue: newAnimateVal * 0.05,
-						duration: 0,
-						useNativeDriver: true,
-					}).start();
-				}
+				Animated.timing(this.overlayAnimateVal, {
+					toValue: newAnimateVal,
+					duration: 0,
+					useNativeDriver: true,
+				}).start();
+				// this.headerAnimateVal.setValue(newAnimateVal);
 			},
 			onPanResponderRelease: () => {
 				if (this.headerAnimateVal._value > 0.5 || this.contentAnimateVal._value > 0.5) {
@@ -147,9 +128,6 @@ export default class InteractiveCard extends Component {
 			// To notify parent that this card is active
 			if (this.props.onActive)
 				this.props.index ? this.props.onActive(this.props.index) : this.props.onActive(true)
-		} else {
-			this.close();
-
 		}
 	}
 
@@ -211,6 +189,7 @@ export default class InteractiveCard extends Component {
 			useNativeDriver: true,
 			speed: 10,
 			bounciness: 8,
+
 		}).start((status) => {
 			if (status.finished) {
 				this.containerStyle = [this.props.style, this.containerRequiredStyle, {zIndex: 0}];
@@ -325,9 +304,9 @@ export default class InteractiveCard extends Component {
 
 	}
 
-	getDismissIconAnimatableStyles() {
+	initDismissIconAnimatableStyles() {
 		return {
-			opacity: this.contentAnimateVal.interpolate({
+			opacity: this.headerAnimateVal.interpolate({
 				inputRange: [0, 1],
 				outputRange: [0, 1]
 			}),
@@ -354,8 +333,8 @@ export default class InteractiveCard extends Component {
 		        disabled={this.state.isActive}>
 
 			    <Animated.View style={this.state.overlayStyles}/>
-			    <Animated.View style={this.state.wrapperStyles}  >
-				    <Header ref="head" style={this.header.props.style} panHandlers={this.state.panResponder.panHandlers}>
+			    <Animated.View style={this.state.wrapperStyles}>
+				    <Header style={this.header.props.style} panHandlers={this.state.panResponder.panHandlers}>
 					    {this.header.props.children}
 				    </Header>
 				    <Content style={this.state.contentStyles}>
@@ -394,16 +373,15 @@ export class DismissButton extends Component {
 		if (this.props.imageSource) {
 			return this.props.imageSource;
 		} else {
-			return ("./assets/dismissBlue.png");
+			return require("./assets/dismissBlue.png");
 		}
 	}
 	render() {
 		return (
-		    <TouchableOpacity onPress={(this._onDismissPress) ? this._onDismissPress.bind(this) : undefined}
-		                      style={[styles.dismissButton]}>
-			    {/*<Animated.Image source={"./assets/dismissBlue.png"}*/}
-			                    {/*resizeMode={'contain'}/>*/}
-			                    <Text>{this.props.text || "yay"}</Text>
+		    <TouchableOpacity onPress={this.props.onPress}
+		                      style={[styles.dismissButton, this.props.style]}>
+			    <Animated.Image source={this.getImage()}
+			                    resizeMode={'contain'}/>
 		    </TouchableOpacity>
 		)
 	}
