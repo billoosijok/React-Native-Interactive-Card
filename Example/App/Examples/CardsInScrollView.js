@@ -1,35 +1,38 @@
 import React from 'react';
-import {StyleSheet, Text, ScrollView, View} from 'react-native';
+import {StyleSheet, Text, ScrollView, View, Animated} from 'react-native';
 
-import InteractiveCard, {Header, Content, DismissButton} from './src/InteractiveCard';
+import InteractiveCard, {Header, Content, DismissButton} from 'react-native-interactive-card';
 
-export default class App extends React.Component {
+export default class CardsInScrollView  extends React.Component {
 	constructor() {
 		super();
-		this.state = {activeCard : true}
+		this.state = {activeCard : null};
 
-		this.stuff = [
-			{}
-		];
+		this.layoutAnimationValue = new Animated.Value(0);
+	}
 
-		this.cards = [1,2,3,4,5,6,7,8].map((number, i) => {
+	componentWillMount() {
+		this.state.cards = [
+			0,1,2,3,4,5,6,7,8,9,10,11,
+			12,13,14,15,16,17,18,19,20
+		].map((number, i) => {
 
-			const dismissButton = (<DismissButton key={i} yes="true" />)
 			return (
 				<InteractiveCard
 					key={i}
 					name={number}
 					style={styles.cardStyles}
-					openCoords={{y: 5, x: 5, height: 260, width: 300}}
-					overlayOpacity={0.7}>
+					openCoords={{y: 100, x: 5}}
+					overlayOpacity={0.8}
+					onActive={this.setActiveCard.bind(this)}
+					onAnimationProgress={this.getAnimationProgress.bind(this)}
+				>
 					<Header style={styles.headerWrapper}>
 						<View style={styles.cardHeader}>
 							<View style={styles.leftColumn}>
 								<View style={styles.image} />
 							</View>
 							<View style={styles.rightColumn}>
-								<DismissButton card={this.refs.name} />
-
 								<View style={styles.heading} />
 								<View style={styles.subheading} />
 							</View>
@@ -42,30 +45,67 @@ export default class App extends React.Component {
 					</Content>
 				</InteractiveCard>
 			)
-		})
+		});
 	}
+
+	setActiveCard(card) {
+		Animated.timing(this.layoutAnimationValue, {
+			toValue: (Boolean(card)) ? 1 : 0,
+			duration: 200
+		}).start();
+		this.setState({activeCard: card});
+	}
+
+	getAnimationProgress(draggingProgress) {
+		if (draggingProgress >= 0 && draggingProgress <= 1)
+			this.layoutAnimationValue.setValue(draggingProgress);
+	}
+
+	getNavBarStyles() {
+		return {
+			height: this.layoutAnimationValue.interpolate({
+				inputRange: [0, 1],
+				outputRange: [80, 0]
+			}),
+			backgroundColor: "rgba(0,0,0,0.1)",
+			alignItems: "center",
+			justifyContent: "flex-end",
+		}
+	}
+
 	render() {
 		return (
-			<ScrollView scrollEnabled={false} style={styles.container}>
-				{this.cards}
-			</ScrollView>
+			<View style={styles.container}>
+				<Animated.View style={this.getNavBarStyles()}>
+					<View style={styles.navBar}/>
+				</Animated.View>
+				<ScrollView scrollEnabled={!Boolean(this.state.activeCard)}>
+					{this.state.cards}
+				</ScrollView>
+			</View>
 		);
 	}
 }
-
-const cardHeight = 102.44;
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#fff',
-		paddingTop: 30
 	},
 	cardStyles: {
 		flex: 1,
 	},
+	navBar: {
+		backgroundColor: 'black',
+		borderRadius: 10,
+		opacity: 0.6,
+		width: "80%",
+		height: 30,
+		marginBottom: 10
+	},
 	headerWrapper: {
-		padding: 10
+		padding: 10,
+		paddingBottom: 30
 	},
 	cardHeader: {
 		height: 100,
@@ -84,7 +124,6 @@ const styles = StyleSheet.create({
 	rightColumn: {
 		flex: 3,
 		padding: 10,
-
 	},
 	image: {
 		width: "100%",

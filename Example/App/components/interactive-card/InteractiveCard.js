@@ -63,7 +63,7 @@ export default class InteractiveCard extends Component {
 
 	// -- Component lifecycle methods -- //
 	componentWillMount() {
-		// yay
+
 		// Combining required styles with styles passed into 'style' prop
 		this.state.contentStyles =
 			(Array.isArray(this.content.props.style)) ?
@@ -132,7 +132,6 @@ export default class InteractiveCard extends Component {
 		if (!this.state.isActive) {
 			this.setState({ isActive: true });
 			this.props.onActive(true);
-
 		}
 
 
@@ -168,7 +167,6 @@ export default class InteractiveCard extends Component {
 		this.props.onActive(null);
 
 		this.instantVal.setValue(0);
-		// this.props.onAnimationProgress(newAnimateVal);
 
 		Animated.spring(this.headerAnimateVal, {
 			toValue: 0,
@@ -260,20 +258,20 @@ export default class InteractiveCard extends Component {
 		const overlayOpacity = (!isNaN(Number(this.props.overlayOpacity))) ? {from: 0, to: this.props.overlayOpacity} : this.props.overlayOpacity;
 
 		const containerYCenter = containerY + (containerHeight / 2);
-		const overlayScaleY = windowDimensions.height/ containerHeight; // 0.5 for margin
+		const overlayScaleY = windowDimensions.height/ containerHeight + 4; // 4 for margin
 		const newHeight = containerHeight * overlayScaleY;
 
 		let overlayDeadCenter = containerYCenter - (windowDimensions.height / 2) + containerHeight / 2;
-		overlayDeadCenter = -overlayDeadCenter/overlayScaleY+11;
+		overlayDeadCenter = -overlayDeadCenter/overlayScaleY/30;
 
 		// console.log(overlayDeadCenter/overlayScaleY);
 
 		return {
 			transform : [
-				// { scaleX: this.overlayAnimateVal.interpolate({
-				// 	inputRange: [0, 1],
-				// 	outputRange: [1, 2]
-				// })},
+				{ scaleX: this.overlayAnimateVal.interpolate({
+					inputRange: [0, 1],
+					outputRange: [1, 2]
+				})},
 				{ scaleY: this.overlayAnimateVal.interpolate({
 					inputRange: [0, 0.1, 1],
 					outputRange: [1, overlayScaleY, overlayScaleY]
