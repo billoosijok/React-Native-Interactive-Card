@@ -24,8 +24,7 @@ let generateProject = project => {
 ### InteractiveCard
 | Prop  | Type | Description|
 | :---: |:---:| :---:|
-| `openCoords` | ```obeject: 
-{y: number, x: number}``` | The `x` & `y` coordinates of the location that the card should be in when it opens. The origin(`y:0, x:0`) is the top left of the parent view.
+| `openCoords` | `object: {y: number, x: number}` | The `x` & `y` coordinates of the location that the card should be in when it opens. The origin(`y:0, x:0`) is the top left of the parent view.
 ### Header
 ### Content
 | Prop  | Type | Description|
