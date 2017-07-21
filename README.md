@@ -1,9 +1,5 @@
 # react-native-interactive-card
 Interactive Cards for React Native
 
-### Status:
-Still in the works.
+<div style="text-align: center;"><img src="https://thumbs.gfycat.com/PinkCourteousHerculesbeetle-size_restricted.gif" /></div>
 
-
-### Demo
-![Demo Gif](https://thumbs.gfycat.com/PinkCourteousHerculesbeetle-size_restricted.gif)
