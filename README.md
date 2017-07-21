@@ -22,6 +22,12 @@ let generateProject = project => {
 # Props
 
 ### InteractiveCard
+| Prop  | Type | Description|
+| :---: |:---:| :---:|
+| `openCoords` | `obeject`: `{y: number, x: number}` | The `x` & `y` coordinates of the location that the card should be in when it opens. The origin(`y:0, x:0`) is the top left of the parent view.
 ### Header
 ### Content
-| `enterFrom` | `bottom`,`top`,`right`,`left`,`none` | Direction from which the content enters. Defaults to `top`
+| Prop  | Type | Description|
+| :---: |:---:| :---:|
+| `enterFrom` | `enum`: `"bottom"`,`"top"`,`"right"`,`"left"`,`"none"` | Direction from which the content enters. Defaults to `"top"`|
+
