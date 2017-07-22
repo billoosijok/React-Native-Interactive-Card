@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import {
 	Text,
 	View,
@@ -31,7 +31,7 @@ export default class InteractiveCard extends Component {
 			left: 0,
 			right: 0
 		};
-		this.containerRequiredStyle = {position: 'relative', overflow: 'hidden'};
+		this.containerRequiredStyle = {position: 'relative'};
 
 		this.overlayRequiredStyles = {
 			position: 'absolute',
@@ -81,10 +81,14 @@ export default class InteractiveCard extends Component {
 			onMoveShouldSetResponder: () => this.state.isActive,
 			onPanResponderMove: (event, gestureState) => {
 
-				const target = this.containerLayoutInWindow.y + Math.abs(this.props.openCoords.y);
+				// If there are openCoords (the coordinated of where the card should open in). We add that
+				// to the original Y position of the card. Then we can get the Y target of the card
+				const numberToFactor = (this.props.openCoords && this.props.openCoords.y) ? Math.abs(this.props.openCoords.y) : 20;
+
+				const target = this.containerLayoutInWindow.y + numberToFactor;
 				let newAnimateVal = 1 - (gestureState.dy / target);
 
-				this.props.onAnimationProgress(newAnimateVal);
+				if (this.props.onDraggingProgress) { this.props.onDraggingProgress(newAnimateVal) }
 
 				// If it's more than 1 or less than 0 we decrease the animation rate. ie add friction
 				if (newAnimateVal > 1.05) newAnimateVal = 1 + newAnimateVal * 0.05;
@@ -98,7 +102,8 @@ export default class InteractiveCard extends Component {
 			onPanResponderRelease: () => {
 
 				if (this.headerAnimateVal._value > 0.5 || this.contentAnimateVal._value > 0.5) {
-					this.open()
+					this.open();
+
 				} else {
 					this.close()
 				}
@@ -113,9 +118,6 @@ export default class InteractiveCard extends Component {
 		if (!this.state.isActive) {
 			this.initCardWrapperAnimatableStyles(this.open);
 
-			// To notify parent that this card is active
-			if (this.props.onActive)
-				this.props.index ? this.props.onActive(this.props.index) : this.props.onActive(true)
 		}
 	}
 
@@ -131,7 +133,8 @@ export default class InteractiveCard extends Component {
 		// To avoid re-rendering
 		if (!this.state.isActive) {
 			this.setState({ isActive: true });
-			this.props.onActive(true);
+
+			if(this.props.onOpen) this.props.onOpen(this);
 
 		}
 
@@ -146,6 +149,9 @@ export default class InteractiveCard extends Component {
 			speed: 10,
 			bounciness: 8,
 		}).start();
+
+		this.headerAnimateVal.addListener((obj) => this.props.onAnimationProgress(obj.value));
+
 
 		Animated.spring(this.contentAnimateVal, {
 			toValue: 1,
@@ -165,10 +171,9 @@ export default class InteractiveCard extends Component {
 
 	close() {
 
-		this.props.onActive(null);
+		if(this.props.onClose) this.props.onClose(this);
 
 		this.instantVal.setValue(0);
-		// this.props.onAnimationProgress(newAnimateVal);
 
 		Animated.spring(this.headerAnimateVal, {
 			toValue: 0,
@@ -184,6 +189,8 @@ export default class InteractiveCard extends Component {
 				if (this.props.onPress) {
 					this.props.onPress(null)
 				}
+
+				this.headerAnimateVal.removeAllListeners();
 			}
 		});
 
@@ -212,7 +219,11 @@ export default class InteractiveCard extends Component {
 			// This will be used for the dismissal pan gesture
 			this.containerLayoutInWindow = {x,y,width,height};
 
-			const newCardWrapperY = -y + this.props.openCoords.y;
+			// If there are openCoords (the coordinated of where the card should open in). We add that
+			// to the original Y position of the card. Then we can get the Y target of the card
+			const numberToFactor = (this.props.openCoords && this.props.openCoords.y) ? this.props.openCoords.y : 20;
+
+			const newCardWrapperY = -y + numberToFactor;
 
 			let positionAnimatedStyles = {
 				transform: [
@@ -226,7 +237,7 @@ export default class InteractiveCard extends Component {
 			const wrapperAnimatableStyles = {
 				...positionAnimatedStyles,
 			};
-			const contentAnimatableStyles = this.initContentAnimatableStyles(height);
+			const contentAnimatableStyles = this.initContentAnimatableStyles(height, width);
 			const overlayAnimatableStyles = this.initOverlayAnimatableStyles(x, y, width, height);
 
 			this.setState({
@@ -238,20 +249,63 @@ export default class InteractiveCard extends Component {
 		});
 	}
 
-	initContentAnimatableStyles(cardWrapperHeight) {
+	initContentAnimatableStyles(cardWrapperHeight, cardWrapperWidth) {
 
-		return {
-			transform: [
-				{ translateY: this.contentAnimateVal.interpolate({
-					inputRange: [0, 1],
-					outputRange: [-100, cardWrapperHeight-20]
-				})}
-			],
-			opacity: this.contentAnimateVal.interpolate({
+		const direction = this.content.props.enterFrom;
+		const window = Dimensions.get('window');
+
+		let translateX = null;
+
+		let translateY = {
+			translateY: this.contentAnimateVal.interpolate({
 				inputRange: [0, 1],
-				outputRange: [0, 1]
+				outputRange: [-cardWrapperHeight, cardWrapperHeight-20]
 			})
 		};
+
+		let factor = 1;
+		switch(direction) {
+			case "top":
+			case "bottom":
+				if(direction === "top") factor = -1;
+				translateY = { translateY: this.contentAnimateVal.interpolate({
+						inputRange: [0, 1],
+						outputRange: [window.height*factor*3, cardWrapperHeight-20]
+					})
+				};
+				break;
+			case "left":
+			case "right":
+				if(direction === "left") factor = -1;
+				translateX = {
+					translateX: this.contentAnimateVal.interpolate({
+						inputRange: [0, 1],
+						outputRange: [window.width*factor, 0]
+					})
+				};
+				break;
+			default:
+				break;
+		}
+
+		let transform = [
+			{ scaleY: this.contentAnimateVal.interpolate({
+				inputRange: [0, 1],
+				outputRange: [0, 1]
+			})},
+			translateY
+		];
+
+		if (translateX) transform.push(translateX);
+
+		return {
+			transform,
+			opacity: this.contentAnimateVal.interpolate({
+				inputRange: [0, 0.3, 1],
+				outputRange: [0, 0, 1]
+			})
+		};
+
 	}
 
 	initOverlayAnimatableStyles(containerX, containerY, containerWidth, containerHeight) {
@@ -260,11 +314,11 @@ export default class InteractiveCard extends Component {
 		const overlayOpacity = (!isNaN(Number(this.props.overlayOpacity))) ? {from: 0, to: this.props.overlayOpacity} : this.props.overlayOpacity;
 
 		const containerYCenter = containerY + (containerHeight / 2);
-		const overlayScaleY = windowDimensions.height/ containerHeight; // 0.5 for margin
+		const overlayScaleY = windowDimensions.height/ containerHeight + 4; // 4 for margin
 		const newHeight = containerHeight * overlayScaleY;
 
 		let overlayDeadCenter = containerYCenter - (windowDimensions.height / 2) + containerHeight / 2;
-		overlayDeadCenter = -overlayDeadCenter/overlayScaleY+11;
+		overlayDeadCenter = -overlayDeadCenter/overlayScaleY/30;
 
 		// console.log(overlayDeadCenter/overlayScaleY);
 
@@ -351,7 +405,7 @@ export class Content extends Component {
 
 	render() {
 		return (
-		    <Animated.View style={this.props.style}>
+		    <Animated.View style={[{alignItems: 'center'}, this.props.style]}>
 			    { this.props.children }
 		    </Animated.View>
 		)
@@ -389,6 +443,30 @@ export class DismissButton extends Component {
 		)
 	}
 }
+
+InteractiveCard.propTypes = {
+	openCoords: PropTypes.object,
+	overlayOpacity: PropTypes.oneOfType([PropTypes.number,PropTypes.object]),
+	overlayColor: PropTypes.string,
+	onOpen: PropTypes.func,
+	onClose: PropTypes.func,
+	onDraggingProgress: PropTypes.func
+};
+
+InteractiveCard.defaultProps = {
+	openCoords: {y: 20, x: 0},
+	overlayOpacity: 0.8,
+	overlayColor: "white",
+};
+
+Content.propTypes = {
+	enterFrom: PropTypes.oneOf(['bottom', 'top', 'right', 'left', 'none'])
+};
+
+Content.defaultProps = {
+	enterFrom: "top"
+};
+
 
 function getAnimatableStyles(interpolationValue, styles) {
 

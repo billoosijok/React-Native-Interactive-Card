@@ -24,8 +24,9 @@ export default class CardsInScrollView  extends React.Component {
 					style={styles.cardStyles}
 					openCoords={{y: 100, x: 5}}
 					overlayOpacity={0.8}
-					onActive={this.setActiveCard.bind(this)}
-					onAnimationProgress={this.getAnimationProgress.bind(this)}
+					onOpen={this.handleCardOpen.bind(this)}
+					onClose={this.handleCardClose.bind(this)}
+					onAnimationProgress={this.onAnimationProgress.bind(this)}
 				>
 					<Header style={styles.headerWrapper}>
 						<View style={styles.cardHeader}>
@@ -38,9 +39,9 @@ export default class CardsInScrollView  extends React.Component {
 							</View>
 						</View>
 					</Header>
-					<Content style={styles.contentWrapper}>
+					<Content enterFrom={"bottom"} style={styles.contentWrapper}>
 						<ScrollView style={styles.content}>
-							<Text style={styles.contentText}>{number}</Text>
+							<Text style={styles.contentText}>{"🤘"}</Text>
 						</ScrollView>
 					</Content>
 				</InteractiveCard>
@@ -48,17 +49,29 @@ export default class CardsInScrollView  extends React.Component {
 		});
 	}
 
-	setActiveCard(card) {
+	onAnimationProgress(draggingProgress) {
+		if (draggingProgress >= 0 && draggingProgress <= 1)
+			this.layoutAnimationValue.setValue(draggingProgress);
+	}
+
+	handleCardOpen(card) {
 		Animated.timing(this.layoutAnimationValue, {
-			toValue: (Boolean(card)) ? 1 : 0,
+			toValue: 1,
 			duration: 200
 		}).start();
 		this.setState({activeCard: card});
 	}
 
-	getAnimationProgress(draggingProgress) {
-		if (draggingProgress >= 0 && draggingProgress <= 1)
-			this.layoutAnimationValue.setValue(draggingProgress);
+	handleCardClose() {
+		Animated.timing(this.layoutAnimationValue, {
+			toValue: 0,
+			duration: 200
+		}).start();
+		this.setState({activeCard: null});
+	}
+
+	getDraggingProgress() {
+
 	}
 
 	getNavBarStyles() {
@@ -77,7 +90,7 @@ export default class CardsInScrollView  extends React.Component {
 		return (
 			<View style={styles.container}>
 				<Animated.View style={this.getNavBarStyles()}>
-					<View style={styles.navBar}/>
+					<View style={styles.navItem}/>
 				</Animated.View>
 				<ScrollView scrollEnabled={!Boolean(this.state.activeCard)}>
 					{this.state.cards}
@@ -95,13 +108,13 @@ const styles = StyleSheet.create({
 	cardStyles: {
 		flex: 1,
 	},
-	navBar: {
+	navItem: {
 		backgroundColor: 'black',
 		borderRadius: 10,
-		opacity: 0.6,
+		opacity: 0.4,
 		width: "80%",
 		height: 30,
-		marginBottom: 10
+		marginBottom: 13
 	},
 	headerWrapper: {
 		padding: 10,
@@ -109,7 +122,7 @@ const styles = StyleSheet.create({
 	},
 	cardHeader: {
 		height: 100,
-		backgroundColor: '#68E9FF',
+		backgroundColor: '#11C5FF',
 		flexDirection: 'row',
 		borderRadius: 5,
 		shadowOffset: {width: 0, height: 2},
@@ -161,7 +174,7 @@ const styles = StyleSheet.create({
 		padding: 10
 	},
 	contentText: {
-		fontSize: 30,
+		fontSize: 50,
 		textAlign: 'center',
 		fontWeight: 'bold',
 	}

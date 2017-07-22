@@ -1,69 +1,24 @@
 import React from 'react';
 import {StyleSheet, Text, ScrollView, View, Animated} from 'react-native';
 
-import InteractiveCard, {Header, Content, DismissButton} from '../components/interactive-card/InteractiveCard.js';
+import InteractiveCard, {Header, Content, DismissButton} from 'react-native-interactive-card';
 
 export default class CardsInScrollView  extends React.Component {
 	constructor() {
 		super();
-		this.state = {activeCard : null};
-
-		this.layoutAnimationValue = new Animated.Value(0);
-	}
-
-	componentWillMount() {
-		this.state.cards = [
-			0,1,2,3,4
-		].map((number, i) => {
-
-			return (
-				<InteractiveCard
-					key={i}
-					name={number}
-					style={styles.cardStyles}
-					openCoords={{y: 20, x: 5}}
-					overlayOpacity={0.8}
-					onActive={this.setActiveCard.bind(this)}
-					onAnimationProgress={this.getAnimationProgress.bind(this)}
-				>
-					<Header style={styles.headerWrapper}>
-						<View style={styles.cardHeader}>
-							<View style={styles.leftColumn}>
-								<View style={styles.image} />
-							</View>
-							<View style={styles.rightColumn}>
-								<View style={styles.heading} />
-								<View style={styles.subheading} />
-							</View>
-						</View>
-					</Header>
-					<Content style={styles.contentWrapper}>
-						<ScrollView style={styles.content}>
-							<Text style={styles.contentText}>{number}</Text>
-						</ScrollView>
-					</Content>
-				</InteractiveCard>
-			)
-		});
-	}
-
-	setActiveCard(card) {
-		Animated.timing(this.layoutAnimationValue, {
-			toValue: (Boolean(card)) ? 1 : 0,
-			duration: 200
-		}).start();
-		this.setState({activeCard: card});
-	}
-
-	getAnimationProgress(draggingProgress) {
-		if (draggingProgress >= 0 && draggingProgress <= 1)
-			this.layoutAnimationValue.setValue(draggingProgress);
 	}
 
 	render() {
 		return (
 			<View style={styles.container}>
-				{this.state.cards}
+				<InteractiveCard>
+					<Header style={styles.cardHeader}>
+						<Text style={styles.text}>Header</Text>
+					</Header>
+					<Content style={styles.content}>
+						<Text style={styles.text}>Content</Text>
+					</Content>
+				</InteractiveCard>
 			</View>
 		);
 	}
@@ -73,70 +28,25 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#fff',
-	},
-	cardStyles: {
-		flex: 1,
-	},
-	headerWrapper: {
-		padding: 10,
-		paddingBottom: 30
+		justifyContent: 'center',
+		padding: 10
 	},
 	cardHeader: {
 		height: 100,
 		backgroundColor: '#68E9FF',
-		flexDirection: 'row',
-		borderRadius: 5,
-		shadowOffset: {width: 0, height: 2},
-		shadowRadius: 1,
-		shadowOpacity: 0.2,
-		shadowColor: 'black'
 	},
-	leftColumn: {
-		flex: 1,
-		padding: 10,
+	text: {
+		fontSize: 40,
+		opacity: 0.6,
+		textAlign: 'center',
+		padding: 20,
+		fontWeight: 'bold'
 	},
-	rightColumn: {
-		flex: 3,
-		padding: 10,
-	},
-	image: {
-		width: "100%",
-		height: "100%",
-		backgroundColor: "#FF9E0D",
-		borderRadius: 50,
-		shadowOffset: {width: 0, height: 2},
-		shadowRadius: 2,
-		shadowOpacity: 0.2,
-		shadowColor: 'black'
-	},
-	heading: {
-		backgroundColor: '#666',
-		width: 200,
-		height: 30,
-		marginBottom: 10,
-		borderRadius: 10
-	},
-	subheading: {
-		backgroundColor: '#888',
-		width: 100,
-		height: 20,
-		borderRadius: 7
-	},
-	contentWrapper:{
-		alignItems: 'center'
-	},
+
 	content: {
 		height: 500,
 		backgroundColor: '#E85F53',
-		width: '92%',
-		marginTop: -20,
-		paddingTop: 30,
-		borderRadius: 3,
+		width: '100%',
 		padding: 10
 	},
-	contentText: {
-		fontSize: 30,
-		textAlign: 'center',
-		fontWeight: 'bold',
-	}
 });
