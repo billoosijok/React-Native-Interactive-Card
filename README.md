@@ -4,8 +4,21 @@
 <p align="center"><img width="250" src="https://thumbs.gfycat.com/DecisiveUnfoldedCaudata-size_restricted.gif" /></p>
 
 ## Table of Content
+- [Installation](#installation)
 - [Usage](#usage)
+- [Examples](#examples)
 - [Props](#props)
+- [License](#license)
+
+# Installation
+#### npm
+```Shell
+npm install react-native-interactive-card
+```
+#### yarn
+```Shell
+yarn add react-native-interactive-card
+```
 
 # Usage
 
@@ -64,6 +77,11 @@ const contentStyle = {
 
 ```
 
+# Examples
+- [Base](#)
+- [Cool Transition](#)
+- [Card In ScollView](#)
+
 # Props
 - [`<InteractiveCard>`](#interactivecard)
 - [`<Content>`](#content)
@@ -84,4 +102,7 @@ const contentStyle = {
 | Prop  | Type | Description|
 | :---: |:---:| :---:|
 | `enterFrom` | `enum`: `"bottom"`,`"top"`,`"right"`,`"left"`,`"none"` | Direction from which the content enters. **Default:** `"top"`|
+
+# License
+[MIT](https://github.com/billoosijok/react-native-interactive-card/blob/master/LICENSE)
 
