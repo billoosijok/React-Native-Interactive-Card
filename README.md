@@ -25,11 +25,11 @@ import InteractiveCard, { Content, Header } from 'react-native-interactive-card'
 		// Content View
 	    </Content>
 	</InteractiveCard>
-//     );
+//    );
 // }
 ```
 
-#### Cooler
+#### Cool
 <img width="250" align="right" src="https://thumbs.gfycat.com/AmusedCompleteGallowaycow-size_restricted.gif" />
 
 ```JSX
