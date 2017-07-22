@@ -13,14 +13,14 @@
 # Usage
 ```JSX
   
-  <InteractiveCard>
-	    <Header style={styles.cardHeader}>
-			    <Text style={styles.text}>Header</Text>
-			</Header>
-			<Content style={styles.content}>
-			    <Text style={styles.text}>Content</Text>
-			</Content>
-	</InteractiveCard>
+<InteractiveCard>
+	<Header>
+	    	// Header View...
+	</Header>
+	<Content>
+	  	// Content View
+	</Content>
+</InteractiveCard>
 ```
 
 # Props
