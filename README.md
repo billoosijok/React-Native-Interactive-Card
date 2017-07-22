@@ -4,15 +4,11 @@
 <p align="center"><img width="300" src="https://thumbs.gfycat.com/DecisiveUnfoldedCaudata-size_restricted.gif" /></p>
 
 ## Table of Content
-- [Installation](#installation)
 - [Usage](#usage)
 - [Props](#props)
 
-# Installation 
-
 # Usage
 ```JSX
-  
 <InteractiveCard>
     <Header>
 	// Header View...
@@ -37,7 +33,6 @@
 | `onDraggingProgress` | `function` | Callback that gets called for every panning movement while the card is being dragged. **Passed:** The progress of the panning a scale of `0` to `1` (where `1` is the card open). _Note that the number can exceed `0` or `1` when the user keeps panning even further._ |
 
 
-### Header
 ### Content
 | Prop  | Type | Description|
 | :---: |:---:| :---:|
