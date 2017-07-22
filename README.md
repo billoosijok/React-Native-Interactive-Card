@@ -65,8 +65,10 @@ const contentStyle = {
 ```
 
 # Props
+- [`<InteractiveCard>`](#interactivecard)
+- [`<Content>`](#content)
 
-### InteractiveCard
+### `<InteractiveCard>`
 | Prop  | Type | Description|
 | :---: |:---:| :---:|
 | `openCoords` | `object: {y: number, x: number}` | The `x` & `y` coordinates of the location that the card should be in when it opens. Where the origin i.e (0,0) is the top left of the parent view. **Default:** `{y: 20, x: 20}`. |
@@ -78,7 +80,7 @@ const contentStyle = {
 | `onDraggingProgress` | `function` | Callback that gets called for every panning movement while the card is being dragged. **Passed:** The progress of the panning a scale of `0` to `1` (where `1` is the card open). _Note that the number can exceed `0` or `1` when the user keeps panning even further._ |
 
 
-### Content
+### `<Content>`
 | Prop  | Type | Description|
 | :---: |:---:| :---:|
 | `enterFrom` | `enum`: `"bottom"`,`"top"`,`"right"`,`"left"`,`"none"` | Direction from which the content enters. **Default:** `"top"`|
