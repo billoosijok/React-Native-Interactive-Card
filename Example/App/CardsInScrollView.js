@@ -25,7 +25,7 @@ export default class CardsInScrollView  extends React.Component {
 					key={i}
 					name={number}
 					style={styles.cardStyles}
-					openCoords={{y: 100, x: 200}}
+					openCoords={{y: 100, x: 0}}
 					overlayOpacity={0.8}
 					onOpen={this.handleCardOpen.bind(this)}
 					onClose={this.handleCardClose.bind(this)}
