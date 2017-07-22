@@ -9,29 +9,40 @@
 
 # Usage
 
+```javascript
+import InteractiveCard, { Content, Header } from 'react-native-interactive-card'
+```
 #### Basic
 ```JSX
-<InteractiveCard>
-    <Header>
-	// Header View...
-    </Header>
-    <Content>
-    	// Content View
-    </Content>
-</InteractiveCard>
+
+// render() {
+//    return (
+	<InteractiveCard>
+	    <Header>
+		// Header View...
+	    </Header>
+	    <Content>
+		// Content View
+	    </Content>
+	</InteractiveCard>
+//     );
+// }
 ```
 
 #### Cooler
 <img width="250" align="right" src="https://thumbs.gfycat.com/AmusedCompleteGallowaycow-size_restricted.gif" />
 
 ```JSX
-<InteractiveCard overlayOpacity={1}>
+const cardOptions = { overlayOpacity : 1 };
+const contentOptions = { enterFrom: "right" }
+
+<InteractiveCard {...cardOptions}>
     <Header>
     	<View style={headerStyle}>
 	    <Text style={styles.text}>Header</Text>
 	</View>
     </Header>
-    <Content enterFrom={"right"}>
+    <Content {...contentOptions}>
     	<View style={contentStyle}>
 	    <Text style={textStyle}>Content</Text>
 	</View>
