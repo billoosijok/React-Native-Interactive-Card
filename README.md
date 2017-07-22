@@ -97,6 +97,6 @@ const contentStyle = {
 | :---: |:---:| :---:|
 | `enterFrom` | `enum`: `"bottom"`,`"top"`,`"right"`,`"left"`,`"none"` | Direction from which the content enters. **Default:** `"top"`|
 
-#License
+# License
 [MIT](https://github.com/billoosijok/react-native-interactive-card/blob/master/LICENSE)
 
