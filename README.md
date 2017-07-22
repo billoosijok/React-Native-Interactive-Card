@@ -14,12 +14,12 @@
 ```JSX
   
 <InteractiveCard>
-	<Header>
-	    	// Header View...
-	</Header>
-	<Content>
-	  	// Content View
-	</Content>
+    <Header>
+	// Header View...
+    </Header>
+    <Content>
+    	// Content View
+    </Content>
 </InteractiveCard>
 ```
 
