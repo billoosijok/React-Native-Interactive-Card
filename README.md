@@ -4,8 +4,19 @@
 <p align="center"><img width="250" src="https://thumbs.gfycat.com/DecisiveUnfoldedCaudata-size_restricted.gif" /></p>
 
 ## Table of Content
+- [Installation](#installation)
 - [Usage](#usage)
 - [Props](#props)
+
+# Installation
+#### npm
+```Shell
+npm i react-native-interactive-card
+```
+#### yarn
+```Shell
+yarn add react-native-interactive-card
+```
 
 # Usage
 
