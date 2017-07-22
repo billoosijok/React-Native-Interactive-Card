@@ -27,22 +27,21 @@
 ```JSX
 <InteractiveCard overlayOpacity={1}>
     <Header>
-    	<View style={styles.cardHeader}>
+    	<View style={headerStyle}>
 	    <Text style={styles.text}>Header</Text>
 	</View>
     </Header>
     <Content enterFrom={"right"}>
-    	<View style={styles.content}>
-	    <Text style={styles.text}>Content</Text>
+    	<View style={contentStyle}>
+	    <Text style={textStyle}>Content</Text>
 	</View>
     </Content>
 </InteractiveCard>
 
-const styles = StyleSheet.create({
-	cardHeader: {backgroundColor: "#68E9FF",padding: 30,marginBottom: 10, borderRadius: 5},
-	text: {fontSize: 40, opacity: 0.6,textAlign: 'center',fontWeight: 'bold'},
-	content: {width: "90%", padding: 50, backgroundColor: "#E85F53"},
-});
+const headerStyle: {backgroundColor: "#68E9FF",padding: 30,marginBottom: 10, borderRadius: 5},
+const textStyle: {fontSize: 40, opacity: 0.6,textAlign: 'center',fontWeight: 'bold'},
+const contentStyle: {width: "90%", padding: 50, backgroundColor: "#E85F53"},
+
 ```
 
 # Props
