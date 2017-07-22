@@ -22,6 +22,8 @@
 ```
 
 #### Cooler
+<img width="250" align="right" src="https://thumbs.gfycat.com/AmusedCompleteGallowaycow-size_restricted.gif" />
+
 ```JSX
 <InteractiveCard overlayOpacity={1}>
     <Header>
@@ -37,7 +39,7 @@
 </InteractiveCard>
 
 const styles = StyleSheet.create({
-	cardHeader: {backgroundColor: "#68E9FF",padding: 30,marginBottom: 10},
+	cardHeader: {backgroundColor: "#68E9FF",padding: 30,marginBottom: 10, borderRadius: 5},
 	text: {fontSize: 40, opacity: 0.6,textAlign: 'center',fontWeight: 'bold'},
 	content: {width: "90%", padding: 50, backgroundColor: "#E85F53"},
 });
