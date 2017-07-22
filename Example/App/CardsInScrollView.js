@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, ScrollView, View, Animated} from 'react-native';
 
-import InteractiveCard, {Header, Content, DismissButton} from 'react-native-interactive-card';
+import InteractiveCard, {Header, Content} from 'react-native-interactive-card';
 
 export default class CardsInScrollView  extends React.Component {
 	constructor() {
@@ -12,10 +12,14 @@ export default class CardsInScrollView  extends React.Component {
 	}
 
 	componentWillMount() {
+		this.loadCards()
+	}
+
+	loadCards() {
 		this.state.cards = [
-			0,1,2,3,4,5,6,7,8,9,10,11,
-			12,13,14,15,16,17,18,19,20
-		].map((number, i) => {
+				0,1,2,3,4,5,6,7,8,9,10,11,
+				12,13,14,15,16,17,18,19,20
+			].map((number, i) => {
 
 			return (
 				<InteractiveCard

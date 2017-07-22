@@ -1,9 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, ScrollView, View, Animated} from 'react-native';
 
-import InteractiveCard, {Header, Content, DismissButton} from 'react-native-interactive-card';
+import InteractiveCard, {Header, Content} from 'react-native-interactive-card';
 
-export default class CardsInScrollView  extends React.Component {
+export default class Base  extends React.Component {
 	constructor() {
 		super();
 	}
@@ -17,7 +17,7 @@ export default class CardsInScrollView  extends React.Component {
 							<Text style={styles.text}>Header</Text>
 						</View>
 					</Header>
-					<Content enterFrom={"right"}>
+					<Content>
 						<View style={styles.content}>
 							<Text style={styles.text}>Content</Text>
 						</View>

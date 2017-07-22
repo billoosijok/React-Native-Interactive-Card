@@ -5,6 +5,6 @@
   "author": "Belal Sejouk",
   "main": "index.js",
   "scripts": {
-    "sync-src":"cp -r src Example/node_modules/react-native-interactive-card"
-  }
+    "sync-src": "cp -r src Example/node_modules/react-native-interactive-card"
+  },
 }
