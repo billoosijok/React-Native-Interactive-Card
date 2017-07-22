@@ -1,6 +1,7 @@
 // @flow
 
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import {
 	Text,
 	View,
@@ -63,11 +64,13 @@ export default class InteractiveCard extends Component {
 
 	// -- Component lifecycle methods -- //
 	componentWillMount() {
+		console.log("Rendering " + this.props.name);
+
 		// yay
 		// Combining required styles with styles passed into 'style' prop
-		this.state.contentStyles =
-			(Array.isArray(this.content.props.style)) ?
-				this.content.props.style.concat(this.contentRequiredStyles) : [].concat(this.content.props.style, this.contentRequiredStyles);
+		// this.state.contentStyles =
+		// 	(Array.isArray(this.content.props.style)) ?
+		// 		this.content.props.style.concat(this.contentRequiredStyles) : [].concat(this.content.props.style, this.contentRequiredStyles);
 
 	}
 
@@ -368,7 +371,6 @@ export default class InteractiveCard extends Component {
 	}
 
 	render() {
-		// console.log("Rendering " + this.props.name);
 		return (
 		    <TouchableOpacity
 			    ref={this.setRef.bind(this,"_containerOfAll")}
@@ -452,7 +454,18 @@ InteractiveCard.propTypes = {
 	onOpen: PropTypes.func,
 	onClose: PropTypes.func,
 	onDraggingProgress: PropTypes.func,
-	onAnimationProgress: PropTypes.func
+	onAnimationProgress: PropTypes.func,
+	children: function(prop, propName) {
+		const children = prop[propName];
+		const numberOfChildren = React.Children.count(children);
+		if (numberOfChildren !== 2) {
+			const whatWeGot = (numberOfChildren !== 1) ?  + `'${numberOfChildren}' are given ` : "only '1' is given ";
+			const message = `Exactly 2 child components are expected inside \`InteractiveCard\` component, but ${whatWeGot}. It is recommended that you use the 'Header' and 'Content' components as the children for readability.`;
+
+			console.error(message);
+			return new Error(message)
+		}
+	}
 };
 
 InteractiveCard.defaultProps = {

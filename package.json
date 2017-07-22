@@ -7,4 +7,5 @@
   "scripts": {
     "sync-src": "cp -r src Example/node_modules/react-native-interactive-card"
   },
+  "license": "MIT"
 }
