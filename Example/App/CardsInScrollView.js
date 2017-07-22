@@ -25,7 +25,7 @@ export default class CardsInScrollView  extends React.Component {
 					key={i}
 					name={number}
 					style={styles.cardStyles}
-					openCoords={{y: 100, x: 5}}
+					openCoords={{y: 100, x: 200}}
 					overlayOpacity={0.8}
 					onOpen={this.handleCardOpen.bind(this)}
 					onClose={this.handleCardClose.bind(this)}
@@ -108,8 +108,14 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: '#fff',
 	},
-	cardStyles: {
+	scrollView: {
 		flex: 1,
+		// flexDirection: 'row',
+		flexWrap: 'wrap'
+	},
+	cardStyles: {
+		flex: 0.4,
+		width: '50%'
 	},
 	navItem: {
 		backgroundColor: 'black',
@@ -153,7 +159,7 @@ const styles = StyleSheet.create({
 	},
 	heading: {
 		backgroundColor: '#666',
-		width: 200,
+		width: "70%",
 		height: 30,
 		marginBottom: 10,
 		borderRadius: 10

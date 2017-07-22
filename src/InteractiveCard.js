@@ -225,15 +225,21 @@ export default class InteractiveCard extends Component {
 
 			// If there are openCoords (the coordinated of where the card should open in). We add that
 			// to the original Y position of the card. Then we can get the Y target of the card
-			const numberToFactor = (this.props.openCoords && this.props.openCoords.y) ? this.props.openCoords.y : 20;
+			const numberToFactorForY = (this.props.openCoords && this.props.openCoords.y) ? this.props.openCoords.y : 20;
+			const numberToFactorForX = (this.props.openCoords && this.props.openCoords.x) ? this.props.openCoords.x : 20;
 
-			const newCardWrapperY = -y + numberToFactor;
+			const newCardWrapperY = -y + numberToFactorForY;
+			const newCardWrapperX = -x + numberToFactorForX;
 
 			let positionAnimatedStyles = {
 				transform: [
 					{ translateY: this.headerAnimateVal.interpolate({
 						inputRange: [0, 1],
 						outputRange: [0, newCardWrapperY]
+					})},
+					{ translateX: this.headerAnimateVal.interpolate({
+						inputRange: [0, 1],
+						outputRange: [0, newCardWrapperX]
 					})}
 				]
 			};
