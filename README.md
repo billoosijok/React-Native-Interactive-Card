@@ -1,12 +1,14 @@
 # react-native-interactive-card
 Interactive Cards for React Native
 
-<div style="text-align: center;"><img src="https://thumbs.gfycat.com/PinkCourteousHerculesbeetle-size_restricted.gif" /></div>
+<p align="center"><img width="300" src="https://thumbs.gfycat.com/InnocentOrganicEgret-size_restricted.gif" /></p>
 
 ## Table of Content
 - [Installation](#installation)
 - [Usage](#usage)
 - [Props](#props)
+
+# Installation 
 
 # Usage
 ```javascript
@@ -29,7 +31,9 @@ let generateProject = project => {
 | `overlayColor`   | `string` | Overlay color. |
 | `onOpen` |  `function` | Callback that gets called when the user opens the card. **Passed:** the card object |
 | `onClose` | `function` | Callback that gets called when the card closes. **Passed:** the card object |
-| `onDraggingProgress` | `function` | Callback that gets called for every panning movement while the card is being dragged. **Passed:** The progress of the panning from `0` to `1` (`1` being the card is open). _Note that the number can exceed `0` or `1` when the user keeps panning even further._ |
+| `onAnimationProgress` | `function` | Callback that gets called every animation frame of the card. **Passed:** Animation progress in a scale of `0` to `1` (where `1` is the card open).
+| `onDraggingProgress` | `function` | Callback that gets called for every panning movement while the card is being dragged.
+**Passed:** The progress of the panning a scale of `0` to `1` (where `1` is the card open). _Note that the number can exceed `0` or `1` when the user keeps panning even further._ |
 
 
 ### Header
