@@ -6,6 +6,7 @@
 ## Table of Content
 - [Installation](#installation)
 - [Usage](#usage)
+- [Examples](#examples)
 - [Props](#props)
 - [License](#license)
 
@@ -75,6 +76,11 @@ const contentStyle = {
 };
 
 ```
+
+# Examples
+- [Base](#)
+- [Cool Transition](#)
+- [Card In ScollView](#)
 
 # Props
 - [`<InteractiveCard>`](#interactivecard)
