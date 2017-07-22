@@ -8,6 +8,8 @@
 - [Props](#props)
 
 # Usage
+
+#### Basic
 ```JSX
 <InteractiveCard>
     <Header>
@@ -17,6 +19,28 @@
     	// Content View
     </Content>
 </InteractiveCard>
+```
+
+#### Cooler
+```JSX
+<InteractiveCard overlayOpacity={1}>
+    <Header>
+    	<View style={styles.cardHeader}>
+	    <Text style={styles.text}>Header</Text>
+	</View>
+    </Header>
+    <Content enterFrom={"right"}>
+    	<View style={styles.content}>
+	    <Text style={styles.text}>Content</Text>
+	</View>
+    </Content>
+</InteractiveCard>
+
+const styles = StyleSheet.create({
+	cardHeader: {backgroundColor: "#68E9FF",padding: 30,marginBottom: 10},
+	text: {fontSize: 40, opacity: 0.6,textAlign: 'center',fontWeight: 'bold'},
+	content: {width: "90%", padding: 50, backgroundColor: "#E85F53"},
+});
 ```
 
 # Props
