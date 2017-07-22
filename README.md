@@ -11,14 +11,16 @@
 # Installation 
 
 # Usage
-```javascript
-
-let generateProject = project => {
-  let code = [];
-  for (let js = 0; js < project.length; js++) {
-    code.push(js);
-  }
-};
+```JSX
+  
+  <InteractiveCard>
+	    <Header style={styles.cardHeader}>
+			    <Text style={styles.text}>Header</Text>
+			</Header>
+			<Content style={styles.content}>
+			    <Text style={styles.text}>Content</Text>
+			</Content>
+	</InteractiveCard>
 ```
 
 # Props
