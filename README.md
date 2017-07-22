@@ -38,9 +38,18 @@
     </Content>
 </InteractiveCard>
 
-const headerStyle: {backgroundColor: "#68E9FF",padding: 30,marginBottom: 10, borderRadius: 5},
-const textStyle: {fontSize: 40, opacity: 0.6,textAlign: 'center',fontWeight: 'bold'},
-const contentStyle: {width: "90%", padding: 50, backgroundColor: "#E85F53"},
+const headerStyle = {
+	backgroundColor: "#68E9FF", padding: 30, 
+	marginBottom: 10, borderRadius: 5 
+};
+const textStyle = {
+	fontSize: 40, opacity: 0.6,
+	textAlign: 'center', fontWeight: 'bold'
+};
+const contentStyle = {
+	width: "90%", padding: 50, 
+	backgroundColor: "#E85F53"
+};
 
 ```
 
