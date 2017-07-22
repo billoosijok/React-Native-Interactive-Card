@@ -150,7 +150,8 @@ export default class InteractiveCard extends Component {
 			bounciness: 8,
 		}).start();
 
-		this.headerAnimateVal.addListener((obj) => this.props.onAnimationProgress(obj.value));
+		if(this.props.onAnimationProgress)
+			this.headerAnimateVal.addListener((obj) => this.props.onAnimationProgress(obj.value));
 
 
 		Animated.spring(this.contentAnimateVal, {
@@ -450,7 +451,8 @@ InteractiveCard.propTypes = {
 	overlayColor: PropTypes.string,
 	onOpen: PropTypes.func,
 	onClose: PropTypes.func,
-	onDraggingProgress: PropTypes.func
+	onDraggingProgress: PropTypes.func,
+	onAnimationProgress: PropTypes.func
 };
 
 InteractiveCard.defaultProps = {

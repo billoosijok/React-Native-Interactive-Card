@@ -11,12 +11,16 @@ export default class CardsInScrollView  extends React.Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<InteractiveCard>
-					<Header style={styles.cardHeader}>
-						<Text style={styles.text}>Header</Text>
+				<InteractiveCard overlayOpacity={1}>
+					<Header>
+						<View style={styles.cardHeader}>
+							<Text style={styles.text}>Header</Text>
+						</View>
 					</Header>
-					<Content style={styles.content}>
-						<Text style={styles.text}>Content</Text>
+					<Content enterFrom={"right"}>
+						<View style={styles.content}>
+							<Text style={styles.text}>Content</Text>
+						</View>
 					</Content>
 				</InteractiveCard>
 			</View>
@@ -31,22 +35,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		padding: 10
 	},
-	cardHeader: {
-		height: 100,
-		backgroundColor: '#68E9FF',
-	},
-	text: {
-		fontSize: 40,
-		opacity: 0.6,
-		textAlign: 'center',
-		padding: 20,
-		fontWeight: 'bold'
-	},
-
-	content: {
-		height: 500,
-		backgroundColor: '#E85F53',
-		width: '100%',
-		padding: 10
-	},
+	cardHeader: {backgroundColor: "#68E9FF",padding: 30,marginBottom: 10, borderRadius: 5},
+	text: {fontSize: 40, opacity: 0.6,textAlign: 'center',fontWeight: 'bold'},
+	content: {width: "90%", padding: 50, backgroundColor: "#E85F53"},
 });
