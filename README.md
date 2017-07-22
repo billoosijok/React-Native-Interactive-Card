@@ -7,11 +7,12 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Props](#props)
+- [License](#license)
 
 # Installation
 #### npm
 ```Shell
-npm i react-native-interactive-card
+npm install react-native-interactive-card
 ```
 #### yarn
 ```Shell
@@ -95,4 +96,7 @@ const contentStyle = {
 | Prop  | Type | Description|
 | :---: |:---:| :---:|
 | `enterFrom` | `enum`: `"bottom"`,`"top"`,`"right"`,`"left"`,`"none"` | Direction from which the content enters. **Default:** `"top"`|
+
+#License
+MIT
 
