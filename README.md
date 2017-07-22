@@ -1,7 +1,7 @@
 # react-native-interactive-card
 > Interactive Cards for React Native
 
-<p align="center"><img width="300" src="https://thumbs.gfycat.com/DecisiveUnfoldedCaudata-size_restricted.gif" /></p>
+<p align="center"><img width="280" src="https://thumbs.gfycat.com/DecisiveUnfoldedCaudata-size_restricted.gif" /></p>
 
 ## Table of Content
 - [Usage](#usage)
