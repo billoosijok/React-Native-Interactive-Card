@@ -90,7 +90,7 @@ const contentStyle = {
 ### `<InteractiveCard>`
 | Prop  | Type | Description|
 | :---: |:---:| :---:|
-| `openCoords` | `object: {y: number, x: number}` | The `x` & `y` coordinates of the location that the card should be in when it opens. Where the origin i.e (0,0) is the top left of the parent view. **Default:** `{y: 20, x: 20}`. |
+| `openCoords` | `object: {y: number, x: number}` | The `x` & `y` coordinates of the location that the card should be in when it opens. Where the origin i.e (0,0) is the top left of the parent view. If you don't want `y` or `x` to change, just pass `null`. **Default:** `{y: 20, x: null}`.   |
 | `overlayOpacity` | `number` | Opacity of the overlay under the card when it opens. **Defalut:** `0.8`. _Tip: set this value to `1.0` to completely "hide" the rest of the cards underneath._ |
 | `overlayColor`   | `string` | Overlay color. |
 | `onOpen` |  `function` | Callback that gets called when the user opens the card. **Passed:** the card object |
