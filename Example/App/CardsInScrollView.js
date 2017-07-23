@@ -16,6 +16,7 @@ export default class CardsInScrollView  extends React.Component {
 	}
 
 	loadCards() {
+
 		this.state.cards = [
 				0,1,2
 			].map((number, i) => {
@@ -25,8 +26,7 @@ export default class CardsInScrollView  extends React.Component {
 					key={i}
 					name={number}
 					style={styles.cardStyles}
-					openCoords={{y: 100, x: 0}}
-					overlayOpacity={0.8}
+					openCoords={{y: 100, x: 200}}
 					onOpen={this.handleCardOpen.bind(this)}
 					onClose={this.handleCardClose.bind(this)}
 					onAnimationProgress={this.onAnimationProgress.bind(this)}
@@ -95,7 +95,7 @@ export default class CardsInScrollView  extends React.Component {
 				<Animated.View style={this.getNavBarStyles()}>
 					<View style={styles.navItem}/>
 				</Animated.View>
-				<ScrollView scrollEnabled={!Boolean(this.state.activeCard)}>
+				<ScrollView contentContainerStyle={styles.scrollView} scrollEnabled={!Boolean(this.state.activeCard)}>
 					{this.state.cards}
 				</ScrollView>
 			</View>
@@ -110,12 +110,11 @@ const styles = StyleSheet.create({
 	},
 	scrollView: {
 		flex: 1,
-		// flexDirection: 'row',
+		flexDirection: 'row',
 		flexWrap: 'wrap'
 	},
 	cardStyles: {
-		flex: 0.4,
-		width: '50%'
+		width: '50%',
 	},
 	navItem: {
 		backgroundColor: 'black',

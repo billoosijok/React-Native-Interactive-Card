@@ -10,9 +10,13 @@ import {
 	PanResponder,
 	TouchableOpacity,
 	LayoutAnimation,
-	Dimensions
+	Dimensions,
+	TouchableWithoutFeedback
 } from 'react-native'
 import styles from './InteractiveCardStyle'
+
+// Making custom animatable components
+Animated.TouchableWithoutFeedback = Animated.createAnimatedComponent(TouchableWithoutFeedback);
 
 export default class InteractiveCard extends Component {
 
@@ -30,13 +34,15 @@ export default class InteractiveCard extends Component {
 			position: 'absolute',
 			zIndex: -1,
 			left: 0,
-			right: 0
+			right: 0,
+			// that way it's not touchable when it's not shown
+			transform: [{scaleY: 0}]
 		};
 		this.containerRequiredStyle = {position: 'relative'};
 
 		this.overlayRequiredStyles = {
 			position: 'absolute',
-			backgroundColor: this.props.overlayColor || 'white',
+			backgroundColor: this.props.overlayColor,
 			opacity: 0,
 			height: "100%",
 			width: "100%"
@@ -319,36 +325,46 @@ export default class InteractiveCard extends Component {
 	}
 
 	initOverlayAnimatableStyles(containerX, containerY, containerWidth, containerHeight) {
+		// NEEDS REVISION
+
 
 		const windowDimensions = Dimensions.get('window');
 		const overlayOpacity = (!isNaN(Number(this.props.overlayOpacity))) ? {from: 0, to: this.props.overlayOpacity} : this.props.overlayOpacity;
 
+		// X axis
+		const containerXCenter = containerX + (containerWidth / 2);
+		const overlayScaleX = windowDimensions.width/ containerWidth + 4; // 4 for margin
+		const newWidth = containerWidth * overlayScaleX;
+
+		let overlayXDeadCenter = containerXCenter - (windowDimensions.width / 2) + containerWidth/ 2;
+		overlayXDeadCenter = -overlayXDeadCenter/overlayScaleX/30;
+
+		// Y  axis
 		const containerYCenter = containerY + (containerHeight / 2);
 		const overlayScaleY = windowDimensions.height/ containerHeight + 4; // 4 for margin
 		const newHeight = containerHeight * overlayScaleY;
 
-		let overlayDeadCenter = containerYCenter - (windowDimensions.height / 2) + containerHeight / 2;
-		overlayDeadCenter = -overlayDeadCenter/overlayScaleY/30;
+		let overlayYDeadCenter = containerYCenter - (windowDimensions.height / 2) + containerHeight / 2;
+		overlayYDeadCenter = -overlayYDeadCenter/overlayScaleY/30;
 
-		// console.log(overlayDeadCenter/overlayScaleY);
 
 		return {
 			transform : [
-				// { scaleX: this.overlayAnimateVal.interpolate({
-				// 	inputRange: [0, 1],
-				// 	outputRange: [1, 2]
-				// })},
+				{ scaleX: this.overlayAnimateVal.interpolate({
+					inputRange: [0, 0.1, 1],
+					outputRange: [1, overlayScaleX, overlayScaleX]
+				})},
 				{ scaleY: this.overlayAnimateVal.interpolate({
 					inputRange: [0, 0.1, 1],
 					outputRange: [1, overlayScaleY, overlayScaleY]
 				})},
-				// { translateX: this.overlayAnimateVal.interpolate({
-				// 	inputRange: [0, 1],
-				// 	outputRange: [0, containerX]
-				// })},
+				{ translateX: this.overlayAnimateVal.interpolate({
+					inputRange: [0, 0.1, 1],
+					outputRange: [0, overlayXDeadCenter, overlayXDeadCenter]
+				})},
 				{ translateY: this.overlayAnimateVal.interpolate({
 					inputRange: [0, 0.1, 1],
-					outputRange: [0, overlayDeadCenter, overlayDeadCenter]
+					outputRange: [0, overlayYDeadCenter, overlayYDeadCenter]
 				})}
 			],
 			opacity: this.overlayAnimateVal.interpolate({
@@ -379,13 +395,16 @@ export default class InteractiveCard extends Component {
 	render() {
 		return (
 		    <TouchableOpacity
+			    {...this.props}
 			    ref={this.setRef.bind(this,"_containerOfAll")}
 			    onPress={this._onPress.bind(this)}
 			    style={this.containerStyle}
 			    activeOpacity={(this.state.isActive ? 1.0 : 0.5)}
 		        disabled={this.state.isActive}>
 
-			    <Animated.View style={this.state.overlayStyles}/>
+			    <TouchableWithoutFeedback onPress={this.close.bind(this)}>
+				    <Animated.View style={this.state.overlayStyles}/>
+			    </TouchableWithoutFeedback>
 			    <Animated.View style={this.state.wrapperStyles}>
 				    <Header style={this.header.props.style} panHandlers={this.state.panResponder.panHandlers}>
 					    {this.header.props.children}
