@@ -1,5 +1,5 @@
 # react-native-interactive-card
-> Interactive Cards for React Native
+Customizable interactive card component for React Native
 
 <p align="center"><img width="250" src="https://thumbs.gfycat.com/DecisiveUnfoldedCaudata-size_restricted.gif" /></p>
 
