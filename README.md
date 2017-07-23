@@ -78,9 +78,10 @@ const contentStyle = {
 ```
 
 # Examples
-- [Base](https://github.com/billoosijok/react-native-interactive-card/tree/master/Example/App)
-- [Cool Transition](https://github.com/billoosijok/react-native-interactive-card/tree/master/Example/App)
-- [Card In ScollView](https://github.com/billoosijok/react-native-interactive-card/tree/master/Example/App)
+- [Base](https://github.com/billoosijok/react-native-interactive-card/tree/master/Example/App#base)
+- [Custom Transition](https://github.com/billoosijok/react-native-interactive-card/tree/master/Example/App#custom-transition)
+- [Cards In ScollView](https://github.com/billoosijok/react-native-interactive-card/tree/master/Example/App#cards-in-scrollview)
+- [iPad](https://github.com/billoosijok/react-native-interactive-card/tree/master/Example/App#ipad)
 
 # Props
 - [`<InteractiveCard>`](#interactivecard)
