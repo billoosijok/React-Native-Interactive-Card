@@ -3,7 +3,7 @@ import {StyleSheet, Text, ScrollView, View, Animated} from 'react-native';
 
 import InteractiveCard, {Header, Content} from 'react-native-interactive-card';
 
-export default class CoolTransition extends React.Component {
+export default class CustomTransition extends React.Component {
 	constructor() {
 		super();
 	}
