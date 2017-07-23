@@ -1,21 +1,20 @@
 # Interactive Card - Examples
 
-### Base
-```Base.js```
+## Base
 
 <img width="300" src="https://thumbs.gfycat.com/PettyHotClownanemonefish-size_restricted.gif" />
 
-### Custom Transition
+## Custom Transition
 ```CustomTransition.js```
 
 <img width="300" src="https://thumbs.gfycat.com/AmusedCompleteGallowaycow-size_restricted.gif" />
 
-### Cards In ScrollView
+## Cards In ScrollView
 ```CardsInScrollView.js```
 
 <img width="300" src="https://thumbs.gfycat.com/DecisiveUnfoldedCaudata-size_restricted.gif" />
 
-### iPad
+## iPad
 
 ```CardsInScrollView.js```
 
