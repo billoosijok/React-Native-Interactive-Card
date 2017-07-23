@@ -1,7 +1,10 @@
 import React from 'react';
-import {StyleSheet, Text, ScrollView, View, Animated} from 'react-native';
+import {StyleSheet, Text, ScrollView, View, Animated, Dimensions} from 'react-native';
 
 import InteractiveCard, {Header, Content} from 'react-native-interactive-card';
+
+const windowDimensions = Dimensions.get('window');
+const cardWidth = (windowDimensions.width < 768) ? windowDimensions.width : windowDimensions.width/2;
 
 export default class CardsInScrollView  extends React.Component {
 	constructor() {
@@ -17,16 +20,15 @@ export default class CardsInScrollView  extends React.Component {
 
 	loadCards() {
 
-		this.state.cards = [
-				0,1,2
-			].map((number, i) => {
+		this.state.cards = [0,1,2,3,4,5].map((number, i) => {
 
 			return (
 				<InteractiveCard
 					key={i}
 					name={number}
 					style={styles.cardStyles}
-					openCoords={{y: 100, x: 200}}
+					// In iPhone we leave the X as is. But in iPad we shift the X to center the card.
+					openCoords={{y: 100, x: (windowDimensions.width < 768) ? null : windowDimensions.width/2 - cardWidth/2}}
 					onOpen={this.handleCardOpen.bind(this)}
 					onClose={this.handleCardClose.bind(this)}
 					onAnimationProgress={this.onAnimationProgress.bind(this)}
@@ -114,7 +116,7 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap'
 	},
 	cardStyles: {
-		width: '50%',
+		width: cardWidth,
 	},
 	navItem: {
 		backgroundColor: 'black',

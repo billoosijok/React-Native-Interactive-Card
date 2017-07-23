@@ -3,12 +3,12 @@ import {StyleSheet, Text, ScrollView, View, Animated} from 'react-native';
 
 import CardsInScrollView from './App/CardsInScrollView'
 import CardsInView from './App/Base'
-import CoolTransition from './App/CoolTransition'
+import CustomTransition from './App/CustomTransition'
 
 export default class App extends React.Component {
 
 	loadCardsInView = () => <CardsInView />;
-	loadCoolTransition = () => <CoolTransition />;
+	loadCustomTransition = () => <CustomTransition />;
 	loadCardsInScrollView = () => <CardsInScrollView />;
 
 	render() {

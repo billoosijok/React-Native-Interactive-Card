@@ -229,25 +229,43 @@ export default class InteractiveCard extends Component {
 			// This will be used for the dismissal pan gesture
 			this.containerLayoutInWindow = {x,y,width,height};
 
-			// If there are openCoords (the coordinated of where the card should open in). We add that
-			// to the original Y position of the card. Then we can get the Y target of the card
-			const numberToFactorForY = (this.props.openCoords && this.props.openCoords.y) ? this.props.openCoords.y : 20;
-			const numberToFactorForX = (this.props.openCoords && this.props.openCoords.x) ? this.props.openCoords.x : 0;
+			// If the `Y` is null. That means it was explicitly declared so that the card doesn't move on the 'Y' axis
+			// so only then we make the amount of movement 0. Because if the 'Y' was left out, we still move the card up
+			// with a default value of 20. The reason behind that is that for those who will use the component without
+			// explicitly declaring the 'Y' prop, they still get the jumping card by default. That way they'd think
+			// it's cool.
+			//
+			// For the `X`, however, we make the amount of movement 0 if it was null or even undefined (it was left out).
+			let numberToFactorForY = (this.props.openCoords.y !== null) ? this.props.openCoords.y : 0;
+			const numberToFactorForX = (this.props.openCoords.x) ? this.props.openCoords.x : 0;
+
+			if(numberToFactorForY === undefined) numberToFactorForY = 20;
 
 			const newCardWrapperY = -y + numberToFactorForY;
 			const newCardWrapperX = -x + numberToFactorForX;
 
+			let transformsToPerform = [];
+
+			// Checking undefined as well, that way even `y` wasn't passed we treat it
+			if (this.props.openCoords.y !== null) {
+
+				const translateY = { translateY: this.headerAnimateVal.interpolate({
+					inputRange: [0, 1],
+					outputRange: [0, newCardWrapperY]
+				})};
+				transformsToPerform.push(translateY);
+			}
+
+			if (this.props.openCoords.x !== null && this.props.openCoords.x !== undefined) {
+				const translateX = { translateX: this.headerAnimateVal.interpolate({
+					inputRange: [0, 1],
+					outputRange: [0, newCardWrapperX]
+				})};
+				transformsToPerform.push(translateX);
+			}
+
 			let positionAnimatedStyles = {
-				transform: [
-					{ translateY: this.headerAnimateVal.interpolate({
-						inputRange: [0, 1],
-						outputRange: [0, newCardWrapperY]
-					})},
-					{ translateX: this.headerAnimateVal.interpolate({
-						inputRange: [0, 1],
-						outputRange: [0, newCardWrapperX]
-					})}
-				]
+				transform: transformsToPerform
 			};
 
 			const wrapperAnimatableStyles = {
@@ -327,7 +345,6 @@ export default class InteractiveCard extends Component {
 	initOverlayAnimatableStyles(containerX, containerY, containerWidth, containerHeight) {
 		// NEEDS REVISION
 
-
 		const windowDimensions = Dimensions.get('window');
 		const overlayOpacity = (!isNaN(Number(this.props.overlayOpacity))) ? {from: 0, to: this.props.overlayOpacity} : this.props.overlayOpacity;
 
@@ -395,7 +412,7 @@ export default class InteractiveCard extends Component {
 	render() {
 		return (
 		    <TouchableOpacity
-			    {...this.props}
+			    onLayout={this.props.onLayout}
 			    ref={this.setRef.bind(this,"_containerOfAll")}
 			    onPress={this._onPress.bind(this)}
 			    style={this.containerStyle}
@@ -480,6 +497,7 @@ InteractiveCard.propTypes = {
 	onClose: PropTypes.func,
 	onDraggingProgress: PropTypes.func,
 	onAnimationProgress: PropTypes.func,
+	onLayout: PropTypes.func,
 	children: function(prop, propName) {
 		const children = prop[propName];
 		const numberOfChildren = React.Children.count(children);
@@ -494,7 +512,7 @@ InteractiveCard.propTypes = {
 };
 
 InteractiveCard.defaultProps = {
-	openCoords: {y: 20, x: 0},
+	openCoords: {y: 20, x: null},
 	overlayOpacity: 0.8,
 	overlayColor: "white",
 };
