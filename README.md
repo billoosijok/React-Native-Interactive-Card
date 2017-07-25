@@ -4,13 +4,13 @@ Customizable interactive card component for React Native
 <p align="center"><img width="250" src="https://thumbs.gfycat.com/DecisiveUnfoldedCaudata-size_restricted.gif" /></p>
 
 ## Table of Content
-- [Installation](#installation)
-- [Usage](#usage)
-- [Examples](#examples)
-- [Props](#props)
-- [License](#license)
+- ⬇️ [Installation](#installation)
+- 🎉 [Usage](#usage)
+- 📲 [Examples](#examples)
+- ⚙️ [Props](#props)
+- ⚖️ [License](#license)
 
-# Installation
+# ⬇️ Installation
 #### npm
 ```Shell
 npm install react-native-interactive-card
@@ -20,7 +20,7 @@ npm install react-native-interactive-card
 yarn add react-native-interactive-card
 ```
 
-# Usage
+# 🎉 Usage
 
 ```javascript
 import InteractiveCard, { Content, Header } from 'react-native-interactive-card'
@@ -77,13 +77,13 @@ const contentStyle = {
 
 ```
 
-# Examples
+# 📲 Examples
 - [Base](https://github.com/billoosijok/react-native-interactive-card/tree/master/Example/App#base)
 - [Custom Transition](https://github.com/billoosijok/react-native-interactive-card/tree/master/Example/App#custom-transition)
 - [Cards In ScollView](https://github.com/billoosijok/react-native-interactive-card/tree/master/Example/App#cards-in-scrollview)
 - [iPad](https://github.com/billoosijok/react-native-interactive-card/tree/master/Example/App#ipad)
 
-# Props
+# ⚙️ Props
 - [`<InteractiveCard>`](#interactivecard)
 - [`<Content>`](#content)
 
@@ -104,6 +104,6 @@ const contentStyle = {
 | :---: |:---:| :---:|
 | `enterFrom` | `enum`: `"bottom"`,`"top"`,`"right"`,`"left"`,`"none"` | Direction from which the content enters. **Default:** `"top"`|
 
-# License
+# ⚖️ License
 [MIT](https://github.com/billoosijok/react-native-interactive-card/blob/master/LICENSE)
 
