@@ -1,6 +1,6 @@
 {
   "name": "react-native-interactive-card",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Interactive card component for React Native",
   "author": "Belal Sejouk",
   "main": "index.js",
