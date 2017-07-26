@@ -4,7 +4,7 @@ import {StyleSheet, Text, ScrollView, View, Animated, Dimensions} from 'react-na
 import InteractiveCard, {Header, Content} from 'react-native-interactive-card';
 
 const windowDimensions = Dimensions.get('window');
-const cardWidth = (windowDimensions.width < 768) ? windowDimensions.width : windowDimensions.width/2;
+const cardWidth = (windowDimensions.width < 768) ? "100%" : "50%";
 
 export default class CardsInScrollView  extends React.Component {
 	constructor() {
@@ -20,15 +20,15 @@ export default class CardsInScrollView  extends React.Component {
 
 	loadCards() {
 
-		this.state.cards = [0,1,2,3,4,5].map((number, i) => {
+		this.state.cards = [0,1,2,3,4,5, 6, 7, 8, 9, 10].map((number, i) => {
 
 			return (
 				<InteractiveCard
 					key={i}
 					name={number}
 					style={styles.cardStyles}
-					// In iPhone we leave the X as is. But in iPad we shift the X to center the card.
-					openCoords={{y: 100, x: (windowDimensions.width < 768) ? null : windowDimensions.width/2 - cardWidth/2}}
+					// On iPhone we open the card at 100 in the Y axis. But in iPad we leave it as is.
+					openCoords={{y: 100, x: "center"}}
 					onOpen={this.handleCardOpen.bind(this)}
 					onClose={this.handleCardClose.bind(this)}
 					onAnimationProgress={this.onAnimationProgress.bind(this)}
@@ -97,7 +97,7 @@ export default class CardsInScrollView  extends React.Component {
 				<Animated.View style={this.getNavBarStyles()}>
 					<View style={styles.navItem}/>
 				</Animated.View>
-				<ScrollView contentContainerStyle={styles.scrollView} scrollEnabled={!Boolean(this.state.activeCard)}>
+				<ScrollView contentContainerStyle={styles.scrollViewConentContainer} style={styles.scrollView} scrollEnabled={!Boolean(this.state.activeCard)}>
 					{this.state.cards}
 				</ScrollView>
 			</View>
@@ -112,8 +112,11 @@ const styles = StyleSheet.create({
 	},
 	scrollView: {
 		flex: 1,
+	},
+	scrollViewConentContainer: {
+		flexWrap: 'wrap',
 		flexDirection: 'row',
-		flexWrap: 'wrap'
+
 	},
 	cardStyles: {
 		width: cardWidth,

@@ -242,11 +242,15 @@ export default class InteractiveCard extends Component {
 			if(numberToFactorForY === undefined) numberToFactorForY = 20;
 
 			const newCardWrapperY = -y + numberToFactorForY;
-			const newCardWrapperX = -x + numberToFactorForX;
+			let newCardWrapperX;
+
+			if (numberToFactorForX === "center")
+				newCardWrapperX = -x + Dimensions.get('window').width/2 - width/2;
+			else
+				newCardWrapperX = -x + numberToFactorForX;
 
 			let transformsToPerform = [];
 
-			// Checking undefined as well, that way even `y` wasn't passed we treat it
 			if (this.props.openCoords.y !== null) {
 
 				const translateY = { translateY: this.headerAnimateVal.interpolate({
